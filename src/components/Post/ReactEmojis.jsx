@@ -14,13 +14,14 @@ import Tooltip from '@mui/material/Tooltip'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import ShowComments from '~/components/ShowComments/ShowComments'
 import { useState } from 'react'
-const ReactEmojis = ({ comments, likes }) => {
+
+const ReactEmojis = ({ post_id, likes }) => {
   const [showComment, setShowComment] = useState(false)
   const [bookmark, setBookmark] = useState(true)
   const [like, setLike] = useState(true)
   return <>
     {
-      showComment && <ShowComments setShowComment={setShowComment} comments={comments} />
+      showComment && <ShowComments setShowComment={setShowComment} post_id={post_id} />
     }
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

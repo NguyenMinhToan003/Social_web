@@ -9,10 +9,32 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import { NavLink } from 'react-router-dom'
-
+import { useState } from 'react'
+import { registerUser } from '~/api/AuthAPI'
+import Loading from '~/components/Loading'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 const Signup = () => {
+  const navigation = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [rePassword, setRePassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSignup = async () => {
+    if (password !== rePassword) return toast.error('Password not match')
+    setLoading(true)
+    const res = await registerUser(username, email, password)
+    setLoading(false)
+    if (res.acknowledged) {
+      toast.success('account created successfully')
+      navigation('/login')
+    }
+  }
   return (
     <>
+      {loading && <Loading />}
       <Grid container sx={{ height: '100%', width: '100%', padding: '5px', backgroundColor: 'background.secondary', color: 'text.primary' }}>
         <Grid item xs={5} >
           <img src={image} style={{ width: '100%', objectFit: 'scale-down' }} alt='login_art' />
@@ -27,10 +49,19 @@ const Signup = () => {
               management your project
             </Typography>
             <Box sx={{ width: '24rem', display: 'flex', flexDirection: 'column', gap: 3, marginTop: 5 }}>
-              <TextField id='email' label='Email' type='email' color='secondary' />
-              <TextField id='password' label='Password' type='password' color='secondary' />
-              <TextField id='re-password' label='Re-password' type='password' color='secondary' />
+              <TextField
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                id='email' label='Email' type='email' color='secondary' />
+              <TextField
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                id='username' label='Username' type='text' color='secondary' />
+              <TextField value={password} onChange={(e) => setPassword(e.target.value)} id='password' label='Password' type='password' color='secondary' />
+              <TextField value={rePassword} onChange={(e) => setRePassword(e.target.value)} id='rePassword' label='Re-Password' type='password' color='secondary' />
+
               <Button
+                onClick={handleSignup}
                 sx={{ fontWeight: 'bold', paddingX: 2, paddingY: 2, borderRadius: 3, border: '2px solid #162d3a', backgroundColor: '#162d3a', textAlign: 'center', color: 'background.primary', ':hover': { color: '#162d3a' } }}>
                 Create
               </Button>

@@ -15,7 +15,6 @@ import { useConfirm } from 'material-ui-confirm'
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 const Post = ({ post }) => {
-  console.log(post)
   const [imageIndex, setImageIndex] = useState(null)
   const confirm = useConfirm()
   const handleShowImage = () => {
@@ -145,7 +144,7 @@ const Post = ({ post }) => {
             </ImageList >
           )
         }
-        <ReactEmojis comments={post.comments} likes={post.likes} />
+        <ReactEmojis post_id={post._id} likes={post.likes} />
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <img src={avatar} alt="avatar" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
