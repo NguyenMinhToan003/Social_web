@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Slide from '@mui/material/Slide'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -17,17 +17,51 @@ import avatar from '~/assets/avatar.png'
 import ListComments from './ListComments'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import AddReactionIcon from '@mui/icons-material/AddReaction'
+import { getCommentsByPostId, sendComment } from '~/api/comments.js'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import { socket } from '~/Socket'
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-const ShowComments = ({ setShowComment, comments }) => {
+const ShowComments = ({ setShowComment, post_id }) => {
   const [chat, setChat] = React.useState('')
-  const handleSendChat = () => {
+  const user = useSelector(state => state.userData)
+  const [comments, setComments] = useState([])
+  const fetchComments = async () => {
+    const res = await getCommentsByPostId(post_id)
+    setComments(res)
+  }
+  useEffect(() => {
+    socket.emit('join_room', post_id)
+    fetchComments()
+    return () => {
+      socket.emit('leave_room', post_id)
+    }
+  }, [post_id])
+  const handleReceiveComment = (data) => {
+    setComments(prevComments => [data, ...prevComments])
+  }
+  useEffect(() => {
+    socket.on('receive_comment', handleReceiveComment)
+    return () => {
+      socket.off('receive_comment', handleReceiveComment)
+    }
+  }, [handleReceiveComment])
+  const handleSendChat = async () => {
     if (chat) {
-      toast.success('Comment sent')
-      setChat('')
+      const content = chat
+      const author_id = user._id
+      const res = await sendComment(post_id, author_id, content)
+
+      if (res.acknowledged) {
+        const newComment = { post_id, content, author: [{ profile_picture: user.profile_picture, username: user.username }], createdAt: new Date() }
+        socket.emit('send_comment', newComment)
+        toast.success('Comment sent')
+        setChat('')
+      }
+
     }
   }
   return (

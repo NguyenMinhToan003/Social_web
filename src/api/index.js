@@ -18,11 +18,11 @@ instance.interceptors.response.use(
   },
   function (error) {
     toast.error(error?.response?.data?.message);
-    console.log(error);
+    toast.error(error?.response?.data?.error);
     if (error.response.status === StatusCodes.UNAUTHORIZED) {
       console.log('Unauthorized');
     }
-    return error.response
+    return null
   }
 );
 

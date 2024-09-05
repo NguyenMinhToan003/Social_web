@@ -24,10 +24,11 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const handleLogin = async () => {
     setLoading(true)
-    const dataUser = await getDataUser(account, password)
+    let dataUser = null
+    dataUser = await getDataUser(account, password) || {}
     setLoading(false)
     localStorage.setItem('token', dataUser.token)
-    if (dataUser._id) {
+    if (dataUser?._id) {
       dispatch(login(dataUser))
       navigation('/')
     }

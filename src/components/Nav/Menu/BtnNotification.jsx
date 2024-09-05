@@ -19,9 +19,7 @@ const BtnNotification = () => {
       toast.info(data.message)
       setCountNotification(prevCount => prevCount + 1)
     }
-
     socket.on('notification', handleNotification)
-
     return () => {
       socket.off('notification', handleNotification)
     }
