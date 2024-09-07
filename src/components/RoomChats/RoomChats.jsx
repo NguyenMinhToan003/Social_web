@@ -1,16 +1,8 @@
 import Box from '@mui/material/Box'
-import { useEffect, useState } from 'react'
 import RoomChat from './RoomChat'
-import { getRoomChats } from '~/api/roomChatAPI'
+import { useSelector } from 'react-redux'
 const RoomChats = ({ setStatusAction, setRoom }) => {
-  const [listRooms, setListRooms] = useState([])
-  const fetchRoomChats = async () => {
-    const response = await getRoomChats()
-    setListRooms(response)
-  }
-  useEffect(() => {
-    fetchRoomChats()
-  }, [])
+  const listRooms = useSelector(state => state.chatData)
   return <>
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, overflowY: 'auto', overflowX: 'hidden', padding: '10px' }}>
       {

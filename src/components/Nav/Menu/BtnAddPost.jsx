@@ -12,7 +12,6 @@ const BtnAddPost = () => {
         </Tooltip>
       </NavLink>
     </Box>
-
   </>
 }
 export default BtnAddPost

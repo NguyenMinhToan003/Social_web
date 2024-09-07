@@ -18,15 +18,19 @@ import { sendMessage } from '~/api/messagesAPI'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
+import LoadingArea from '~/components/LoadingArea'
 const Chat = ({ setStatusAction, room }) => {
   const profile = useSelector(state => state.userData)
   const [chat, setChat] = useState('')
+  const [loading, setLoading] = useState(false)
   const [messagesReceived, setMessagesReceived] = useState({
     members: [],
     messages: []
   })
   const fetchMessages = async () => {
+    setLoading(true)
     const response = await getRoomChatMessages(room._id, profile._id)
+    setLoading(false)
     if (!response?.messages?.error)
       response.messages = response.messages.map(data => {
         data.sender = data.sender[0]
@@ -78,7 +82,7 @@ const Chat = ({ setStatusAction, room }) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100vh', padding: '10px' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '10px' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px', padding: '10px' }}>
         <Box sx={{ display: 'flex', justifyContent: 'start', alignItems: 'center', gap: 1, backgroundColor: 'background.primary' }}>
           <Tooltip title='Back'>
@@ -98,6 +102,7 @@ const Chat = ({ setStatusAction, room }) => {
       </Box>
       <Divider />
       <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%' }}>
+        {loading && <LoadingArea />}
         {
           messagesReceived.messages.error ? <Divider ><Typography sx={{ color: 'red' }}>{messagesReceived.messages.error}</Typography></Divider> :
             messagesReceived.messages.map((data, index) => {
@@ -136,6 +141,7 @@ const Chat = ({ setStatusAction, room }) => {
             })
         }
       </Box>
+      <Box id='forward'></Box>
       <Divider />
       <Box sx={{ padding: '10px' }}>
         <Box

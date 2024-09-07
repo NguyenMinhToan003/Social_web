@@ -13,6 +13,10 @@ export const theme = extendTheme({
     secondary: {
       main: '#2b54ea'
     },
+    third: {
+      main: '#3F7000',
+      more: '#E0EDCD'
+    },
     background: {
       primary: '#f7f8fa',
       secondary: '#ffffff'

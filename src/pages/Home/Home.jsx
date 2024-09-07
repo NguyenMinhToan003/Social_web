@@ -31,7 +31,7 @@ const Home = () => {
           sx={{
             minWidth: theme => theme.socialMedia.widthRight,
             maxWidth: theme => theme.socialMedia.widthRight,
-            display: { xs: 'none', md: 'block' }
+            display: { xs: 'none', lg: 'block' }
           }}>
         </Box>
       </Box>
