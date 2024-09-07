@@ -8,6 +8,7 @@ import Follwer from '../pages/Follwer/Follwer'
 import Login from '~/pages/Auth/Login'
 import Signup from '~/pages/Auth/Signup'
 import Chats from '../pages/chats/Chats'
+import AddPost from '../pages/addPost/AddPost'
 const AppRouter = () => {
   return (
     <Routes>
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Route path='chats' element={<Chats />} />
         <Route path='bookmark' element={<Posts />} />
         <Route path='notifications' element={<Notifications />} />
+        <Route path='add-post' element={<AddPost />} />
       </Route>
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />

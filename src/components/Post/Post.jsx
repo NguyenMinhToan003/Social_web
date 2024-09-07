@@ -119,7 +119,7 @@ const Post = ({ post }) => {
         {
           post?.media?.length > 1 && (
             <ImageList
-              sx={{ width: '100%', height: '600px', overflowY: 'hidden' }}
+              sx={{ width: '100%', height: { sm: '500px', lg: '600px' }, overflowY: 'hidden' }}
               max={4}
             >
               {post?.media?.map((item, index) => (
@@ -134,6 +134,7 @@ const Post = ({ post }) => {
                   }
                   {
                     index < 4 ? <img
+                      sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       srcSet={`${item}?w=248&fit=crop&auto=format&dpr=2 2x`}
                       src={`${item}?w=248&fit=crop&auto=format`}
                       loading="lazy"

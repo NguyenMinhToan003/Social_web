@@ -3,8 +3,9 @@ import { getPosts } from '~/api/postAPI'
 import { useEffect, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 const Posts = () => {
-  const [listPosts, setListPosts] = useState([])
+  const [listPosts, setListPosts] = useState(null)
   const fetchPosts = async () => {
     const response = await getPosts()
     console.log(response)
@@ -13,8 +14,18 @@ const Posts = () => {
   useEffect(() => {
     fetchPosts()
   }, [])
-  if (!listPosts) return <Box
-    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress />Loading...</Box>
+  if (listPosts === null) return <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      gap: 3,
+      backgroundColor: '#00000010'
+    }}>
+    <CircularProgress color='secondary' />
+    <Typography variant='body2' color='text.primary'>Loading...</Typography>
+  </Box>
   return <>
     <Box >
       {
