@@ -41,7 +41,7 @@ const Nav = () => {
           <BtnNotification />
         </NavLink>
         <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
-        <NavLink to="/chats#forward" className='navLink'>
+        <NavLink to="/roomchats" className='navLink'>
           <BtnChat />
         </NavLink>
         <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />

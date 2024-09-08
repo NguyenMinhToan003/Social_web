@@ -3,6 +3,7 @@ import AppRouter from './routers/AppRouter'
 import { socket } from './Socket'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+
 function App() {
   const profile = useSelector(state => state.userData)
   useEffect(() => {

@@ -6,10 +6,11 @@ import Avatar from '@mui/material/Avatar'
 import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
-const RoomChat = ({ roomChat, setStatusAction, setRoom }) => {
+import { useNavigate } from 'react-router-dom'
+const RoomChat = ({ roomChat }) => {
+  const navigate = useNavigate()
   const handleChooseRoom = () => {
-    setStatusAction('chat')
-    setRoom(roomChat)
+    navigate(`/chats/${roomChat._id}`)
   }
   if (!roomChat) return null
   const StyledBadge = styled(Badge)(({ theme }) => ({

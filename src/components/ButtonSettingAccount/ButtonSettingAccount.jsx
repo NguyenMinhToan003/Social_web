@@ -24,6 +24,7 @@ const ButtonSettingAccount = () => {
   }
   const handleLogout = () => {
     dispatch(logout())
+
   }
   return <>
     <Tooltip title="Settings"><IconButton sx={{ color: 'text.primary' }} onClick={handleClick}

@@ -8,6 +8,9 @@ export const chatSlice = createSlice({
       chatSlice = []
     },
     changeChatRoom: (state, action) => {
+      if (action.payload === null) {
+        return []
+      }
       const prev = [...action.payload]
       return prev
     }
