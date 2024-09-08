@@ -4,6 +4,6 @@ import { chatSlice } from './ChatSlice'
 export default configureStore({
   reducer: {
     userData: userSlice.reducer,
-    chatData: chatSlice.reducer
+    chatData: chatSlice.reducer,
   }
 })

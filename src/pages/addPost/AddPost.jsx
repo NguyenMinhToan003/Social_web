@@ -41,14 +41,21 @@ const AddPost = () => {
   }
   const handleSublit = async () => {
     setLoading(true)
-    const res = await createPost(profile._id, title, content, media)
-    setLoading(false)
-    if (res.acknowledged) {
-      setTitle('')
-      setContent('')
-      setMedia([])
-      setHastag([])
-      toast.success('Post success')
+    try {
+      const res = await createPost(profile._id, title, content, media)
+      if (res.acknowledged) {
+        setTitle('')
+        setContent('')
+        setMedia([])
+        setHastag([])
+        toast.success('Post success')
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      setLoading(false)
     }
   }
   return <>

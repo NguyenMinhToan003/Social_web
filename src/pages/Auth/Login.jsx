@@ -17,7 +17,9 @@ import { login } from '~/redux/UserSlice'
 import { useNavigate } from 'react-router-dom'
 import Loading from '~/components/Loading'
 import { getRoomChats } from '~/api/roomChatAPI'
-import { changeChatRoom } from '../../redux/ChatSlice'
+import { changeChatRoom } from '~/redux/ChatSlice'
+import { getFriends } from '~/api/userAPI'
+
 const Login = () => {
   const navigation = useNavigate()
   const dispatch = useDispatch()
@@ -32,7 +34,8 @@ const Login = () => {
     localStorage.setItem('token', dataUser.token)
     if (dataUser?._id) {
       dispatch(login(dataUser))
-      dispatch(changeChatRoom(await getRoomChats()))
+      dispatch(changeChatRoom(await getRoomChats(dataUser._id)))
+
       navigation('/')
     }
 

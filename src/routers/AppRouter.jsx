@@ -7,8 +7,9 @@ import Notifications from '../pages/Notifications/Notifications'
 import Follwer from '../pages/Follwer/Follwer'
 import Login from '~/pages/Auth/Login'
 import Signup from '~/pages/Auth/Signup'
-import Chats from '../pages/chats/Chats'
+import Chats from '../pages/chats/Roomchats'
 import AddPost from '../pages/addPost/AddPost'
+import Recovery from '../components/Recovery/Recovery'
 const AppRouter = () => {
   return (
     <Routes>
@@ -19,7 +20,8 @@ const AppRouter = () => {
           <Route path='notification' element={<Notifications />} />
           <Route path='follower' element={<Follwer />} />
         </Route>
-        <Route path='chats' element={<Chats />} />
+        <Route path='roomchats' element={<Recovery />} />
+        <Route path='chats/:id' element={<Chats />} />
         <Route path='bookmark' element={<Posts />} />
         <Route path='notifications' element={<Notifications />} />
         <Route path='add-post' element={<AddPost />} />
