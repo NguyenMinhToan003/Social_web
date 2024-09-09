@@ -25,7 +25,7 @@ import LoadingArea from '~/components/LoadingArea';
 const Chat = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const roomId = id;
+  const [roomId, setRoomId] = useState(id);
   const messagesEndRef = useRef(null);
   const profile = useSelector(state => state.userData);
   const [chat, setChat] = useState('');
@@ -35,12 +35,14 @@ const Chat = () => {
     members: [],
     messages: []
   });
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [roomchat.messages]);
   const fetchMessages = async () => {
     setLoading(true);
     const response = await getRoomChatMessages(roomId, profile._id);
+    setRoomId(response?._id);
     if (!response?.messages?.error) {
       response.messages = response?.messages?.map(data => {
         data.sender = data.sender[0];
@@ -50,18 +52,17 @@ const Chat = () => {
     }
     setRoomchat(response);
     setLoading(false);
-
   };
 
   useEffect(() => {
     fetchMessages();
-    if (!roomchat.messages.error) {
+    if (!roomchat?.messages?.error) {
       socket.emit('join_room', roomId);
       return () => {
         socket.emit('leave_room', roomId);
       };
     }
-  }, [roomId]);
+  }, [id]);
 
   const handleReceiveMessage = (data) => {
     setRoomchat(prevMessages => ({
@@ -78,6 +79,7 @@ const Chat = () => {
       })
       return () => {
         socket.off('receive_message', handleReceiveMessage);
+        socket.off('typing');
       };
     }
   }, []);
@@ -144,12 +146,12 @@ const Chat = () => {
       <Divider />
       <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%' }}>
         {loading && <LoadingArea />}
-        {roomchat.messages.error ? (
+        {roomchat?.messages?.error ? (
           <Divider sx={{ margin: 1 }}>
             <Typography sx={{ color: 'red' }}>{roomchat.messages.error}</Typography>
           </Divider>
         ) : (
-          roomchat.messages.map((data, index) => (
+          roomchat?.messages?.map((data, index) => (
             <Box key={index}
               sx={{
                 display: 'flex',
