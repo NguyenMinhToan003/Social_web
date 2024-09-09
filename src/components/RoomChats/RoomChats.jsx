@@ -10,8 +10,10 @@ const RoomChats = ({ setRoom }) => {
   const [friends, setFriends] = useState([])
   const fetchFriends = async () => {
     const res = await getFriends(profile._id)
-    console.log('Friends:', res)
-    setFriends(res)
+    const friendsNonRoomChat = res.filter(friend => {
+      return !listRooms.some(room => room.members.includes(friend._id))
+    })
+    setFriends(friendsNonRoomChat)
   }
 
   useEffect(() => {

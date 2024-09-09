@@ -18,7 +18,6 @@ import { useNavigate } from 'react-router-dom'
 import Loading from '~/components/Loading'
 import { getRoomChats } from '~/api/roomChatAPI'
 import { changeChatRoom } from '~/redux/ChatSlice'
-import { getFriends } from '~/api/userAPI'
 
 const Login = () => {
   const navigation = useNavigate()
