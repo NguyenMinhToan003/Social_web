@@ -43,10 +43,10 @@ const RoomChat = ({ roomChat }) => {
   }))
   return <>
     <Box
-      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, backgroundColor: 'background.secondary', cursor: 'pointer', ':hover': { backgroundColor: 'background.primary' }, padding: '10px 0px' }} >
+      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, backgroundColor: 'background.secondary', cursor: 'pointer', ':hover': { backgroundColor: 'background.primary' } }} >
       <Box
         onClick={() => handleChooseRoom()}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, width: '100%' }}>
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, width: '100%', padding: 2 }}>
         <StyledBadge
           overlap="circular"
           variant="dot"

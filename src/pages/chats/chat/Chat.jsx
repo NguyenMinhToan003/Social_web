@@ -25,7 +25,7 @@ import LoadingArea from '~/components/LoadingArea';
 const Chat = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [roomId, setRoomId] = useState(id);
+  let roomId = id;
   const messagesEndRef = useRef(null);
   const profile = useSelector(state => state.userData);
   const [chat, setChat] = useState('');
@@ -39,10 +39,14 @@ const Chat = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [roomchat.messages]);
+
   const fetchMessages = async () => {
+    roomId = id;
     setLoading(true);
     const response = await getRoomChatMessages(roomId, profile._id);
-    setRoomId(response?._id);
+    if (response?.redirect)
+      navigate(`/chats/${response.redirect}`);
+    roomId = response?._id;
     if (!response?.messages?.error) {
       response.messages = response?.messages?.map(data => {
         data.sender = data.sender[0];
@@ -55,6 +59,7 @@ const Chat = () => {
   };
 
   useEffect(() => {
+
     fetchMessages();
     if (!roomchat?.messages?.error) {
       socket.emit('join_room', roomId);
@@ -63,13 +68,6 @@ const Chat = () => {
       };
     }
   }, [id]);
-
-  const handleReceiveMessage = (data) => {
-    setRoomchat(prevMessages => ({
-      ...prevMessages,
-      messages: [...prevMessages.messages, data]
-    }));
-  };
 
   useEffect(() => {
     if (!roomchat.messages.error) {
@@ -83,6 +81,13 @@ const Chat = () => {
       };
     }
   }, []);
+
+  const handleReceiveMessage = (data) => {
+    setRoomchat(prevMessages => ({
+      ...prevMessages,
+      messages: [...prevMessages.messages, data]
+    }));
+  };
 
   const handleSendChat = async () => {
     if (roomchat.messages.error) {
@@ -109,7 +114,6 @@ const Chat = () => {
     }
   };
   const handleUnTyping = () => {
-    console.log('untyping')
     socket.emit('untyping', {
       room: roomId,
       username: profile.username,
