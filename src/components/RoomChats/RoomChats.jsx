@@ -4,23 +4,26 @@ import { getFriends } from '~/api/userAPI'
 import RoomChatFriend from './RoomChatFriend'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { getRoomChats } from '~/api/roomChatAPI'
 const RoomChats = ({ setRoom }) => {
   const profile = useSelector(state => state.userData)
-  let listRooms = useSelector(state => state.chatData)
+  const [listRooms, setListRooms] = useState([])
   const [friends, setFriends] = useState([])
-  const fetchFriends = async () => {
-    const res = await getFriends(profile._id)
-    const friendsNonRoomChat = res.filter(friend => {
-      return !listRooms.some(room => room.members.includes(friend._id))
+
+  const fetchRooms = async () => {
+    let resRoom = await getRoomChats(profile._id)
+    setListRooms(resRoom)
+    let resFriend = await getFriends(profile._id)
+    const friendsNonRoomChat = resFriend.filter(friend => {
+      return !resRoom.some(room => room.type === 'private' && room.members.includes(friend._id))
     })
     setFriends(friendsNonRoomChat)
   }
-
   useEffect(() => {
-    fetchFriends()
+    fetchRooms()
   }, [])
   return <>
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, overflowY: 'auto', overflowX: 'hidden', padding: '10px' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', padding: '10px' }}>
       {
         friends?.map((data, index) => {
           return <RoomChatFriend key={index} friend={data} setRoom={setRoom} />
