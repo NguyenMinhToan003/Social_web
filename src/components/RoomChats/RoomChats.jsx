@@ -1,7 +1,8 @@
 import Box from '@mui/material/Box'
 import RoomChat from './RoomChat'
-import { getFriends } from '~/api/userAPI'
 import RoomChatFriend from './RoomChatFriend'
+import TextField from '@mui/material/TextField'
+import { getFriends } from '~/api/userAPI'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { getRoomChats } from '~/api/roomChatAPI'
@@ -23,6 +24,12 @@ const RoomChats = ({ setRoom }) => {
     fetchRooms()
   }, [])
   return <>
+    <TextField
+      variant="filled"
+      fullWidth
+      placeholder="Search for recovery"
+      sx={{ marginBottom: 2, padding: '10px' }}
+    />
     <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', padding: '10px' }}>
       {
         friends?.map((data, index) => {
