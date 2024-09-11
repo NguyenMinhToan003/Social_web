@@ -13,25 +13,26 @@ const AddPost = () => {
   const profile = useSelector(state => state.userData)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-  const [media, setMedia] = useState([])
+  const [mediaPrev, setMediaPrev] = useState([])
+  const [mediaUpload, setMediaUpload] = useState([])
   const [hastag, setHastag] = useState([])
   const [loading, setLoading] = useState(false)
   const handleUploadFile = (e) => {
     const files = e.target.files
-
+    console.log('files', files)
     if (!files) return
-
-    let newMedia = [...media]
+    setMediaUpload([...files])
+    let newMedia = [...mediaPrev]
     for (let i = 0; i < files.length; i++) {
       newMedia.push(URL.createObjectURL(files[i]))
     }
-    setMedia(newMedia)
+    setMediaPrev(newMedia)
   }
   const handlerRemoveMedia = (index) => () => {
     if (index < 0) return
-    let newMedia = [...media]
+    let newMedia = [...mediaPrev]
     newMedia = newMedia.filter((item, i) => i !== index)
-    setMedia(newMedia)
+    setMediaPrev(newMedia)
   }
   const handleChangeHastag = (e) => {
     if (e.target.value === '') return setHastag([])
@@ -42,11 +43,24 @@ const AddPost = () => {
   const handleSublit = async () => {
     setLoading(true)
     try {
-      const res = await createPost(profile._id, title, content, media)
+
+      let data = new FormData();
+      console.log('hastag', hastag)
+      data.append('title', title)
+      data.append('content', content)
+      data.append('author_id', profile._id)
+      data.append('hastag', hastag)
+      for (let i = 0; i < mediaUpload.length; i++) {
+        data.append('media', mediaUpload[i])
+      }
+      console.log(data)
+      const res = await createPost(data)
+      // const res = await createPost(profile._id, title, content, mediaUpload)
+
       if (res.acknowledged) {
         setTitle('')
         setContent('')
-        setMedia([])
+        setMediaPrev([])
         setHastag([])
         toast.success('Post success')
       }
@@ -118,15 +132,15 @@ const AddPost = () => {
       </Button>
       <input type="file" id='upload-file' style={{ display: 'none' }} onChange={(e) => { handleUploadFile(e) }} multiple />
       {
-        media.length > 0
+        mediaPrev.length > 0
         &&
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: 'third.more', padding: 3, borderRadius: 1, width: '80%', margin: '0 auto' }}>
-          <Typography variant='body1' color='third.main' sx={{ fontWeight: 'bold' }}>Preview media</Typography>
+          <Typography variant='body1' color='third.main' sx={{ fontWeight: 'bold' }}>Preview mediaPrev</Typography>
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {
-              media.map((file, index) => (
+              mediaPrev.map((file, index) => (
                 <Box key={index} sx={{ position: 'relative' }}>
-                  <img src={file} alt='media' style={{ width: '150px', height: '150px', objectFit: 'cover' }} />
+                  <img src={file} alt='mediaPrev' style={{ width: '150px', height: '150px', objectFit: 'cover' }} />
                   <IconButton sx={{ position: 'absolute', top: '-10px', right: '-10px', backgroundColor: 'error.main', height: '25px', width: '25px' }} color='primary'
                     onClick={handlerRemoveMedia(index)}>
                     <CloseIcon sx={{ height: '20px', width: '20px', ":hover": { color: 'third.main' } }} />

@@ -56,7 +56,7 @@ const RoomChatFriend = ({ friend }) => {
         backgroundColor: 'background.secondary',
         cursor: 'pointer',
         ':hover': { backgroundColor: 'background.primary' },
-        padding: '10px 0px'
+
       }}
     >
       <Box
@@ -66,7 +66,8 @@ const RoomChatFriend = ({ friend }) => {
           alignItems: 'center',
           justifyContent: 'flex-start',
           gap: 2,
-          width: '100%'
+          width: '100%',
+          padding: 2
         }}
       >
         <StyledBadge

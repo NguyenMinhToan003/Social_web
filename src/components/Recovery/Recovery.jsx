@@ -5,12 +5,7 @@ const Recovery = ({ setRoom }) => {
   return (
     <>
       <Typography variant='h6' sx={{ padding: '10px', textAlign: 'center', fontWeight: 'bold' }}>Room Chats</Typography>
-      <TextField
-        variant="filled"
-        fullWidth
-        placeholder="Search for recovery"
-        sx={{ marginBottom: 2, padding: '10px' }}
-      />
+
       <RoomChats setRoom={setRoom} />
     </>
   )
