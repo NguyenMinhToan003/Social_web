@@ -7,7 +7,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
 import { useNavigate } from 'react-router-dom'
-const RoomChat = ({ roomChat }) => {
+import { useState } from 'react'
+const RoomChat = ({ roomChat, setOpen, open, setRoomChatAction }) => {
   const navigate = useNavigate()
   const handleChooseRoom = () => {
     navigate(`/chats/${roomChat._id}`)
@@ -43,26 +44,65 @@ const RoomChat = ({ roomChat }) => {
   }))
   return <>
     <Box
-      sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, backgroundColor: 'background.secondary', cursor: 'pointer', ':hover': { backgroundColor: 'background.primary' } }} >
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 1,
+        backgroundColor: 'background.secondary',
+        cursor: 'pointer',
+        ':hover': { backgroundColor: 'background.primary' }
+      }} >
+
       <Box
         onClick={() => handleChooseRoom()}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 2, width: '100%', padding: 2 }}>
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          gap: 2,
+          width: '100%', padding: 2
+        }}>
         <StyledBadge
           overlap="circular"
           variant="dot"
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-          <Avatar src={roomChat?.avatarRoom} sx={{ cursor: 'pointer', width: '1.8rem', height: '1.8rem' }} />
+          <Avatar src={roomChat?.avatarRoom}
+            sx={{
+              cursor: 'pointer',
+              width: '1.8rem',
+              height: '1.8rem'
+            }} />
         </StyledBadge>
         <Box
-          sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'start'
+          }}>
           <Typography variant='body1' color='text.primary'>
             {roomChat?.room_name}
           </Typography>
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <IconButton><MoreHorizIcon sx={{ fontSize: '25px', color: 'text.secondary' }} /></IconButton>
-        <IconButton sx={{ color: 'text.secondary', ':hover': { color: 'error.main' } }}><CloseIcon sx={{ fontSize: '25px' }} /></IconButton>
+        <IconButton
+          onClick={() => { setOpen(!open); setRoomChatAction(roomChat) }}
+        >
+          <MoreHorizIcon
+            sx={{
+              fontSize: '25px',
+              color: 'text.secondary'
+            }} />
+        </IconButton>
+        <IconButton
+          sx={{
+            color: 'text.secondary',
+            ':hover': { color: 'error.main' }
+          }}>
+
+          <CloseIcon sx={{ fontSize: '25px' }} />
+        </IconButton>
       </Box>
     </Box >
   </>
