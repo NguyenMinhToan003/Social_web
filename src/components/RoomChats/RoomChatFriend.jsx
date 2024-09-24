@@ -53,7 +53,7 @@ const RoomChatFriend = ({ friend }) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 1,
-        backgroundColor: 'background.secondary',
+        backgroundColor: 'inherit',
         cursor: 'pointer',
         ':hover': { backgroundColor: 'background.primary' },
 
@@ -93,7 +93,7 @@ const RoomChatFriend = ({ friend }) => {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <IconButton>
+        <IconButton >
           <MoreHorizIcon sx={{ fontSize: '25px', color: 'text.secondary' }} />
         </IconButton>
         <IconButton sx={{ color: 'text.secondary', ':hover': { color: 'error.main' } }}>

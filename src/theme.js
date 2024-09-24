@@ -51,7 +51,8 @@ export const theme = extendTheme({
           minWidth: '75vw'
         }
       }
-    }
+    },
+
   }
 
 })
