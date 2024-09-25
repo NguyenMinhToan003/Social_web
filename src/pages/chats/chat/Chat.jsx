@@ -21,8 +21,10 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { useParams, useNavigate } from 'react-router-dom';
 import LoadingArea from '~/components/LoadingArea';
+import MenuChatRoom from '~/components/Menu/MenuChatRoom';
 
 const Chat = () => {
+  const [open, setOpen] = useState(false)
   const navigate = useNavigate();
   const { id } = useParams();
   let roomId = id;
@@ -52,6 +54,7 @@ const Chat = () => {
         return data;
       });
     }
+
     setRoomchat(response);
     setLoading(false);
   };
@@ -128,197 +131,202 @@ const Chat = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '10px' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: '60px',
-          padding: '10px',
-        }}
-      >
+    <>
+      {
+        open && <MenuChatRoom roomChatAction={roomchat} setOpen={setOpen} />
+      }
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '10px' }}>
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'start',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            gap: 1,
-            backgroundColor: 'background.primary',
+            height: '60px',
+            padding: '10px',
           }}
         >
-          <Tooltip title="Back">
-            <IconButton onClick={() => navigate('/roomchats')} sx={{ color: 'error.main' }}>
-              <ArrowBackIcon />
-            </IconButton>
-          </Tooltip>
-          <Button
-            startIcon={
-              <Avatar
-                src={roomchat?.avatarRoom}
-                sx={{ cursor: 'pointer', width: '40px', height: '40px' }}
-              />
-            }
-          >
-            <Typography variant="body1">{roomchat?.room_name}</Typography>
-          </Button>
-        </Box>
-        <Tooltip title="More">
-          <IconButton>
-            <MoreHorizIcon sx={{ color: 'text.primary' }} />
-          </IconButton>
-        </Tooltip>
-      </Box>
-      <Divider />
-      <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%' }}>
-        {loading && <LoadingArea />}
-        {roomchat?.messages?.error ? (
-          <Divider sx={{ margin: 1 }}>
-            <Typography sx={{ color: 'red' }}>{roomchat.messages.error}</Typography>
-          </Divider>
-        ) : (
-          roomchat?.messages?.map((data, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
-                justifyContent:
-                  data.sender._id === profile._id ? 'row-reverse' : 'row',
-                alignItems: 'start',
-                maxWidth: '100%',
-                flexDirection: data.sender._id === profile._id ? 'row-reverse' : 'row',
-                gap: 1,
-                padding: '5px',
-                ':hover .time': { opacity: 1, visibility: 'visible' },
-              }}
-            >
-              {data.sender._id !== profile._id && (
-                <Avatar
-                  src={data.sender.profile_picture}
-                  sx={{ width: '36px', height: '36px' }}
-                />
-              )}
-              <Typography
-                variant="body1"
-                sx={{
-                  wordBreak: 'break-word',
-                  lineHeight: '1.5',
-                  letterSpacing: '0.6px',
-                  backgroundColor:
-                    data.sender._id === profile._id ? 'secondary.main' : '#F0F2F5',
-                  color:
-                    data.sender._id === profile._id ? 'background.primary' : 'text.primary',
-                  borderRadius: 6,
-                  padding: '10px 15px',
-                  fontSize: '15px',
-                  fontweight: '50',
-                }}
-              >
-                {data.message}
-              </Typography>
-              {data.userId !== profile._id && <Chip label={data.name} color="primary" />}
-              <Typography
-                variant="caption"
-                className="time"
-                sx={{
-                  opacity: 0,
-                  transition: 'opacity 0.3s',
-                  visibility: 'hidden',
-                  whiteSpace: 'nowrap',
-                  color: 'text.secondary',
-                }}
-              >
-                {data.createdAt}
-              </Typography>
-            </Box>
-          ))
-        )}
-        {typing.length > 0 && (
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'start',
-              width: '100%',
               alignItems: 'center',
               gap: 1,
-              marginBottom: 1,
+              backgroundColor: 'background.primary',
             }}
           >
-            <AvatarGroup max={4}>
-              {typing.map((data, index) => (
+            <Tooltip title="Back">
+              <IconButton onClick={() => navigate('/roomchats')} sx={{ color: 'error.main' }}>
+                <ArrowBackIcon />
+              </IconButton>
+            </Tooltip>
+            <Button
+              startIcon={
                 <Avatar
-                  key={index}
-                  src={data.profile_picture}
-                  sx={{ width: '35px', height: '35px' }}
+                  src={roomchat?.avatarRoom}
+                  sx={{ cursor: 'pointer', width: '40px', height: '40px' }}
                 />
-              ))}
-            </AvatarGroup>
-            <Chip
-              label={
-                typing.length === 1
-                  ? `${typing[0].username === profile.username
-                    ? 'you'
-                    : typing[0].username
-                  } is typing...`
-                  : 'Several people are typing...'
               }
-              color="info"
-            />
+            >
+              <Typography variant="body1">{roomchat?.room_name}</Typography>
+            </Button>
           </Box>
-        )}
-        <div ref={messagesEndRef} />
-      </Box>
-      <Divider />
-      <Box sx={{ padding: '10px' }}>
-        <Box
-          sx={{
-            backgroundColor: 'background.primary',
-            height: '45px',
-            width: '100%',
-            border: '1px solid green',
-            borderRadius: '100rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <Box sx={{ display: 'flex' }}>
-            <Tooltip title="Add reaction">
-              <IconButton color="error">
-                <AddReactionIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Attach file">
-              <IconButton color="warning" component="label">
-                <AttachFileIcon />
-                <input type="file" style={{ display: 'none' }} />
-              </IconButton>
-            </Tooltip>
-          </Box>
-          <input
-            onBlur={() => handleUnTyping()}
-            onFocus={() => handleTyping()}
-            onChange={(e) => setChat(e.target.value)}
-            value={chat}
-            autoFocus
-            placeholder="Write a comment..."
-            style={{
-              backgroundColor: 'transparent',
-              border: 'none',
-              width: '100%',
-              height: '100%',
-              outline: 'none',
-              fontSize: '1rem',
-            }}
-          />
-          <Tooltip title="Send">
-            <IconButton color="info" onClick={handleSendChat}>
-              <SendIcon />
+          <Tooltip title="More">
+            <IconButton onClick={() => setOpen(true)}>
+              <MoreHorizIcon sx={{ color: 'text.primary' }} />
             </IconButton>
           </Tooltip>
         </Box>
-      </Box>
-    </Box>
+        <Divider />
+        <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%' }}>
+          {loading && <LoadingArea />}
+          {roomchat?.messages?.error ? (
+            <Divider sx={{ margin: 1 }}>
+              <Typography sx={{ color: 'red' }}>{roomchat.messages.error}</Typography>
+            </Divider>
+          ) : (
+            roomchat?.messages?.map((data, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  justifyContent:
+                    data.sender._id === profile._id ? 'row-reverse' : 'row',
+                  alignItems: 'start',
+                  maxWidth: '100%',
+                  flexDirection: data.sender._id === profile._id ? 'row-reverse' : 'row',
+                  gap: 1,
+                  padding: '5px',
+                  ':hover .time': { opacity: 1, visibility: 'visible' },
+                }}
+              >
+                {data.sender._id !== profile._id && (
+                  <Avatar
+                    src={data.sender.profile_picture}
+                    sx={{ width: '36px', height: '36px' }}
+                  />
+                )}
+                <Typography
+                  variant="body1"
+                  sx={{
+                    wordBreak: 'break-word',
+                    lineHeight: '1.5',
+                    letterSpacing: '0.6px',
+                    backgroundColor:
+                      data.sender._id === profile._id ? 'secondary.main' : '#F0F2F5',
+                    color:
+                      data.sender._id === profile._id ? 'background.primary' : 'text.primary',
+                    borderRadius: 6,
+                    padding: '10px 15px',
+                    fontSize: '15px',
+                    fontweight: '50',
+                  }}
+                >
+                  {data.message}
+                </Typography>
+                {data.userId !== profile._id && <Chip label={data.name} color="primary" />}
+                <Typography
+                  variant="caption"
+                  className="time"
+                  sx={{
+                    opacity: 0,
+                    transition: 'opacity 0.3s',
+                    visibility: 'hidden',
+                    whiteSpace: 'nowrap',
+                    color: 'text.secondary',
+                  }}
+                >
+                  {data.createdAt}
+                </Typography>
+              </Box>
+            ))
+          )}
+          {typing.length > 0 && (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'start',
+                width: '100%',
+                alignItems: 'center',
+                gap: 1,
+                marginBottom: 1,
+              }}
+            >
+              <AvatarGroup max={4}>
+                {typing.map((data, index) => (
+                  <Avatar
+                    key={index}
+                    src={data.profile_picture}
+                    sx={{ width: '35px', height: '35px' }}
+                  />
+                ))}
+              </AvatarGroup>
+              <Chip
+                label={
+                  typing.length === 1
+                    ? `${typing[0].username === profile.username
+                      ? 'you'
+                      : typing[0].username
+                    } is typing...`
+                    : 'Several people are typing...'
+                }
+                color="info"
+              />
+            </Box>
+          )}
+          <div ref={messagesEndRef} />
+        </Box>
+        <Divider />
+        <Box sx={{ padding: '10px' }}>
+          <Box
+            sx={{
+              backgroundColor: 'background.primary',
+              height: '45px',
+              width: '100%',
+              border: '1px solid green',
+              borderRadius: '100rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <Box sx={{ display: 'flex' }}>
+              <Tooltip title="Add reaction">
+                <IconButton color="error">
+                  <AddReactionIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Attach file">
+                <IconButton color="warning" component="label">
+                  <AttachFileIcon />
+                  <input type="file" style={{ display: 'none' }} />
+                </IconButton>
+              </Tooltip>
+            </Box>
+            <input
+              onBlur={() => handleUnTyping()}
+              onFocus={() => handleTyping()}
+              onChange={(e) => setChat(e.target.value)}
+              value={chat}
+              autoFocus
+              placeholder="Write a comment..."
+              style={{
+                backgroundColor: 'transparent',
+                border: 'none',
+                width: '100%',
+                height: '100%',
+                outline: 'none',
+                fontSize: '1rem',
+              }}
+            />
+            <Tooltip title="Send">
+              <IconButton color="info" onClick={handleSendChat}>
+                <SendIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+      </Box >
+    </>
   );
 };
 

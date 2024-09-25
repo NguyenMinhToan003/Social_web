@@ -4,17 +4,32 @@ import Divider from '@mui/material/Divider';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import { removeRoomChat } from '~/api/roomChatAPI';
+import { useSelector } from 'react-redux';
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const MenuChatRoom = ({ roomChatAction, setOpen }) => {
+
+  const navigate = useNavigate()
+  const profile = useSelector(state => state.userData)
+  const handlerRemoveRoomChat = async () => {
+    const res = await removeRoomChat(roomChatAction?._id, profile?._id)
+    if (res) {
+      setOpen(false)
+      toast.success(`Remove ${roomChatAction?.room_name} success`)
+      navigate('/roomchats')
+    }
+  }
   return (
     <>
       <Box sx={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         height: '100vh',
         backgroundColor: '#00000450',
-        zIndex: 100,
+        zIndex: 100000,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -34,7 +49,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen }) => {
             gap: 1
           }}>
             <Button
-              startIcon={<Avatar src={roomChatAction.avatarRoom} />}
+              startIcon={<Avatar src={roomChatAction?.avatarRoom} />}
             >
               {roomChatAction?.room_name}
             </Button>
@@ -57,8 +72,10 @@ const MenuChatRoom = ({ roomChatAction, setOpen }) => {
             </Button>
             <Button
               startIcon={<DeleteOutlineIcon />}
-              sx={{ color: 'red' }}>
-              Delete Room
+              sx={{ color: 'red' }}
+              onClick={handlerRemoveRoomChat}
+            >
+              Remove Chat
             </Button>
             <Button
               startIcon={<InsertEmoticonIcon />}
