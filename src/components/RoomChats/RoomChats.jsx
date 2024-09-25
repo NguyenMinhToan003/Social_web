@@ -10,8 +10,10 @@ import { getRoomChats } from '~/api/roomChatAPI'
 import { findUsers } from '~/api/userAPI'
 import { Chip } from '@mui/material'
 import MenuChatRoom from '~/components/Menu/MenuChatRoom'
-
+import SearchIcon from '@mui/icons-material/Search';
+import LoadingArea from '~/components/LoadingArea'
 const RoomChats = ({ setRoom }) => {
+  const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [roomChatAction, setRoomChatAction] = useState({})
   const profile = useSelector(state => state.userData)
@@ -23,6 +25,7 @@ const RoomChats = ({ setRoom }) => {
 
 
   const fetchRooms = async () => {
+    setLoading(true)
     const resRoom = await getRoomChats(profile._id)
     setListRooms(resRoom)
     const resFriend = await getFriends(profile._id)
@@ -30,6 +33,7 @@ const RoomChats = ({ setRoom }) => {
       return !resRoom.some(room => room.type === 'private' && room.members.includes(friend._id))
     })
     setFriends(friendsNonRoomChat)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -38,20 +42,31 @@ const RoomChats = ({ setRoom }) => {
 
   const handlerFindUser = async (e) => {
     if (e.keyCode === 13 && keyword) {
+      setLoading(true)
       const res = await findUsers(e.target.value)
       if (res.length === 0)
         setChipLabel('No user found')
       else
         setChipLabel('Search Results')
       setListSearch(res)
+      setLoading(false)
     }
+  }
+  const handlerClickSearch = async () => {
+    setLoading(true)
+    const res = await findUsers(keyword)
+    if (res.length === 0)
+      setChipLabel('No user found')
+    else
+      setChipLabel('Search Results')
+    setListSearch(res)
+    setLoading(false)
   }
   const handlerCancelSearch = () => {
     setChipLabel('')
     setKeyword('')
     setListSearch([])
   }
-
   return (
     <>
       {
@@ -66,29 +81,55 @@ const RoomChats = ({ setRoom }) => {
           placeholder="Search"
           style={{
             width: '100%',
-            padding: '11px 20px',
+            padding: '10px 20px',
             fontSize: '17px',
-            border: '1px solid #6b6d71',
-            borderRadius: '21px',
+            border: '1.2px solid #6b6d71',
+            borderRadius: '25px',
           }}
         />
         {keyword && (
-          <IconButton
-            onClick={() => handlerCancelSearch()}
-            sx={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'background.primary',
-            }}
-          >
-            <CloseIcon sx={{ fontSize: '20px', fontWeight: '900', color: 'error.main' }} />
-          </IconButton>
-        )}
-      </Box>
+          <Box sx={{
+            position: 'absolute',
+            right: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            backgroundColor: 'background.primary',
+            borderRadius: '50%',
+            display: 'flex',
+            gap: 1
+          }}>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', padding: '10px' }}>
+            <IconButton
+              onClick={() => handlerCancelSearch()}
+            >
+              <CloseIcon
+                sx={{ fontSize: '20px', fontWeight: '900', color: 'error.main' }}
+              />
+            </IconButton>
+            <IconButton
+              onClick={handlerClickSearch}
+              sx={{ backgroundColor: 'hashtag.primary' }}>
+              <SearchIcon
+                sx={{
+                  fontSize: '20px',
+                  fontWeight: '900',
+                  color: 'background.primary',
+                  transition: 'all 0.25s ease-out',
+                  ':hover': { color: 'hashtag.primary', scale: '1.5' }
+                }}
+              />
+            </IconButton>
+          </Box>
+        )}
+      </Box >
+
+      <Box sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        padding: '10px'
+      }}>
         {
           chipLabel && (
             <Chip
@@ -97,20 +138,25 @@ const RoomChats = ({ setRoom }) => {
             />
           )
         }
-        {listSearch.length > 0 ? (
-          listSearch.map((data, index) => (
-            <RoomChatFriend key={index} friend={data} setRoom={setRoom} />
-          ))
-        ) : (
-          <>
-            {friends?.map((data, index) => (
-              <RoomChatFriend key={index} friend={data} setRoom={setRoom} />
-            ))}
-            {listRooms?.map((data, index) => (
-              <RoomChat key={index} roomChat={data} setOpen={setOpen} setRoomChatAction={setRoomChatAction} />
-            ))}
-          </>
-        )}
+        {
+          loading ? <LoadingArea /> :
+            <>
+              {listSearch.length > 0 ? (
+                listSearch.map((data, index) => (
+                  <RoomChatFriend key={index} friend={data} setRoom={setRoom} />
+                ))
+              ) : (
+                <>
+                  {friends?.map((data, index) => (
+                    <RoomChatFriend key={index} friend={data} setRoom={setRoom} />
+                  ))}
+                  {listRooms?.map((data, index) => (
+                    <RoomChat key={index} roomChat={data} setOpen={setOpen} setRoomChatAction={setRoomChatAction} />
+                  ))}
+                </>
+              )}
+            </>
+        }
       </Box>
     </>
   )
