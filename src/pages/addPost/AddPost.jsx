@@ -135,7 +135,7 @@ const AddPost = () => {
         mediaPrev.length > 0
         &&
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: 'third.more', padding: 3, borderRadius: 1, width: '80%', margin: '0 auto' }}>
-          <Typography variant='body1' color='third.main' sx={{ fontWeight: 'bold' }}>Preview mediaPrev</Typography>
+          <Typography variant='body1' color='third.main' sx={{ fontWeight: 'bold' }}>Preview media</Typography>
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {
               mediaPrev.map((file, index) => (

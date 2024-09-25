@@ -133,7 +133,7 @@ const Chat = () => {
   return (
     <>
       {
-        open && <MenuChatRoom roomChatAction={roomchat} setOpen={setOpen} />
+        <MenuChatRoom roomChatAction={roomchat} setOpen={setOpen} open={open} />
       }
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '10px' }}>
         <Box
