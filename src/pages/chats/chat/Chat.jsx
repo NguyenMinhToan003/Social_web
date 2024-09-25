@@ -54,7 +54,6 @@ const Chat = () => {
         return data;
       });
     }
-
     setRoomchat(response);
     setLoading(false);
   };

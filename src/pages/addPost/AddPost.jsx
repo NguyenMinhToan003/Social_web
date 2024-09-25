@@ -139,6 +139,7 @@ const AddPost = () => {
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
             {
               mediaPrev.map((file, index) => (
+                console.log('file', file),
                 <Box key={index} sx={{ position: 'relative' }}>
                   <img src={file} alt='mediaPrev' style={{ width: '150px', height: '150px', objectFit: 'cover' }} />
                   <IconButton sx={{ position: 'absolute', top: '-10px', right: '-10px', backgroundColor: 'error.main', height: '25px', width: '25px' }} color='primary'
