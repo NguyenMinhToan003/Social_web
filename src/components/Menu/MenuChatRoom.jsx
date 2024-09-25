@@ -8,8 +8,10 @@ import { removeRoomChat } from '~/api/roomChatAPI';
 import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const MenuChatRoom = ({ roomChatAction, setOpen }) => {
-
+import CreateRoomChat from '~/components/CreateRoomChat/CreateRoomChat';
+import { useState } from "react";
+const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
+  const [openCreate, setOpenCreate] = useState(false)
   const navigate = useNavigate()
   const profile = useSelector(state => state.userData)
   const handlerRemoveRoomChat = async () => {
@@ -20,9 +22,14 @@ const MenuChatRoom = ({ roomChatAction, setOpen }) => {
       navigate('/roomchats')
     }
   }
+  const hanndlerCreateRoomChat = () => {
+    setOpenCreate(true)
+  }
   return (
     <>
+
       <Box sx={{
+        scale: open ? 1 : 0,
         position: 'fixed',
         top: 0,
         left: 0,
@@ -34,7 +41,10 @@ const MenuChatRoom = ({ roomChatAction, setOpen }) => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
+        <CreateRoomChat open={openCreate} setOpen={setOpenCreate} />
         <Box sx={{
+          transition: 'all 0.25s ease-out',
+          scale: open ? 1 : 0,
           minWidth: '50%',
           minHeight: '50%',
           backgroundColor: 'background.paper',
@@ -42,6 +52,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen }) => {
           padding: '10px',
           padding: 1
         }}>
+
           <Box sx={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -66,6 +77,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen }) => {
             marginTop: 1
           }}>
             <Button
+              onClick={hanndlerCreateRoomChat}
               startIcon={<GroupAddIcon />}
               sx={{ color: 'blue', }}>
               Create Group

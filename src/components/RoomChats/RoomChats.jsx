@@ -70,8 +70,7 @@ const RoomChats = ({ setRoom }) => {
   return (
     <>
       {
-        open &&
-        <MenuChatRoom roomChatAction={roomChatAction} setOpen={setOpen} />
+        <MenuChatRoom roomChatAction={roomChatAction} setOpen={setOpen} open={open} />
       }
       <Box sx={{ position: 'relative', width: '100%', padding: 1 }}>
         <input
@@ -87,40 +86,52 @@ const RoomChats = ({ setRoom }) => {
             borderRadius: '25px',
           }}
         />
-        {keyword && (
-          <Box sx={{
-            position: 'absolute',
-            right: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            backgroundColor: 'background.primary',
-            borderRadius: '50%',
-            display: 'flex',
-            gap: 1
-          }}>
 
-            <IconButton
-              onClick={() => handlerCancelSearch()}
-            >
-              <CloseIcon
-                sx={{ fontSize: '20px', fontWeight: '900', color: 'error.main' }}
-              />
-            </IconButton>
-            <IconButton
-              onClick={handlerClickSearch}
-              sx={{ backgroundColor: 'hashtag.primary' }}>
-              <SearchIcon
-                sx={{
-                  fontSize: '20px',
-                  fontWeight: '900',
-                  color: 'background.primary',
-                  transition: 'all 0.25s ease-out',
-                  ':hover': { color: 'hashtag.primary', scale: '1.5' }
-                }}
-              />
-            </IconButton>
-          </Box>
-        )}
+        <Box sx={{
+          position: 'absolute',
+          right: '10px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          backgroundColor: 'background.primary',
+          borderRadius: '50%',
+          display: 'flex',
+          gap: 1
+        }}>
+
+          <IconButton
+            onClick={handlerCancelSearch}
+            sx={{
+              backgroundColor: 'error.secondary',
+              transition: 'all 0.25s ease-out',
+              scale: keyword === '' ? 0 : 1,
+              opacity: keyword === '' ? 0 : 1,
+              visibility: keyword === '' ? 'hidden' : 'visible'
+            }}
+          >
+            <CloseIcon
+              sx={{ fontSize: '20px', fontWeight: '900', color: 'error.main' }}
+            />
+          </IconButton>
+          <IconButton
+            onClick={handlerClickSearch}
+            sx={{
+              backgroundColor: 'hashtag.primary',
+              transition: 'all 0.25s ease-out',
+              scale: keyword === '' ? 0 : 1,
+              opacity: keyword === '' ? 0 : 1,
+              visibility: keyword === '' ? 'hidden' : 'visible'
+            }}>
+            <SearchIcon
+              sx={{
+                fontSize: '20px',
+                fontWeight: '900',
+                color: 'background.primary',
+                ':hover': { color: 'hashtag.primary' }
+              }}
+            />
+          </IconButton>
+        </Box>
+
       </Box >
 
       <Box sx={{
