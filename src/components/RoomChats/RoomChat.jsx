@@ -7,8 +7,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-const RoomChat = ({ roomChat, setOpen, open, setRoomChatAction }) => {
+const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
   const navigate = useNavigate()
   const handleChooseRoom = () => {
     navigate(`/chats/${roomChat._id}`)
@@ -87,7 +86,7 @@ const RoomChat = ({ roomChat, setOpen, open, setRoomChatAction }) => {
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <IconButton
-          onClick={() => { setOpen(!open); setRoomChatAction(roomChat) }}
+          onClick={() => { console.log('click'), setRoomChatAction(roomChat), setOpen(true) }}
         >
           <MoreHorizIcon
             sx={{
@@ -96,6 +95,7 @@ const RoomChat = ({ roomChat, setOpen, open, setRoomChatAction }) => {
             }} />
         </IconButton>
         <IconButton
+          onClick={() => { console.log('click') }}
           sx={{
             color: 'text.secondary',
             ':hover': { color: 'error.main' }

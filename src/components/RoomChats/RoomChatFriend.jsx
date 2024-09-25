@@ -93,7 +93,7 @@ const RoomChatFriend = ({ friend }) => {
         </Box>
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <IconButton >
+        <IconButton onclick={() => console.log('click')}>
           <MoreHorizIcon sx={{ fontSize: '25px', color: 'text.secondary' }} />
         </IconButton>
         <IconButton sx={{ color: 'text.secondary', ':hover': { color: 'error.main' } }}>

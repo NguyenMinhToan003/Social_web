@@ -107,7 +107,7 @@ const RoomChats = ({ setRoom }) => {
               <RoomChatFriend key={index} friend={data} setRoom={setRoom} />
             ))}
             {listRooms?.map((data, index) => (
-              <RoomChat key={index} roomChat={data} setRoom={setRoom} setOpen={setOpen} open={open} setRoomChatAction={setRoomChatAction} />
+              <RoomChat key={index} roomChat={data} setOpen={setOpen} setRoomChatAction={setRoomChatAction} />
             ))}
           </>
         )}
