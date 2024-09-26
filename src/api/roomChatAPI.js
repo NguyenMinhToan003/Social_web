@@ -9,7 +9,7 @@ export const getRoomChatMessages = async (roomId, userId) => {
   return res?.data
 }
 export const createRoomChat = async (data) => {
-  const res = await axios.post('/room_chats/createRoomChat', data)
+  const res = await axios.post('/room_chats', data)
   return res?.data
 }
 export const removeRoomChat = async (id, user_id) => {

@@ -29,7 +29,7 @@ const RoomChats = ({ setRoom }) => {
     const resRoom = await getRoomChats(profile._id)
     setListRooms(resRoom)
     const resFriend = await getFriends(profile._id)
-    const friendsNonRoomChat = resFriend.filter(friend => {
+    const friendsNonRoomChat = resFriend?.filter(friend => {
       return !resRoom.some(room => room.type === 'private' && room.members.includes(friend._id))
     })
     setFriends(friendsNonRoomChat)
