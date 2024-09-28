@@ -79,7 +79,7 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
             flexDirection: 'column',
             alignItems: 'start'
           }}>
-          <Typography variant='body1' color='text.primary'>
+          <Typography variant='body1' color='text.primary' sx={{ textWrap: 'nowrap' }}>
             {roomChat?.room_name}
           </Typography>
         </Box>

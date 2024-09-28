@@ -108,11 +108,13 @@ const Chat = () => {
     if (roomchat.messages.error) {
       return toast.error(roomchat.messages.error);
     }
-    if (chat.trim()) {
+    const message = chat.trim();
+    console.log(chat)
+    if (chat) {
       const time = new Date().toLocaleTimeString();
       socket.emit('receive_message', {
         room: roomId,
-        message: chat,
+        message: message,
         createdAt: time,
         sender: {
           _id: profile._id,
@@ -134,7 +136,7 @@ const Chat = () => {
       {
         <MenuChatRoom roomChatAction={roomchat} setOpen={setOpen} open={open} />
       }
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '10px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <Box
           sx={{
             display: 'flex',
@@ -176,7 +178,7 @@ const Chat = () => {
           </Tooltip>
         </Box>
         <Divider />
-        <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%' }}>
+        <Box sx={{ overflowY: 'auto', overflowX: 'hidden', height: '100%', padding: 1 }}>
           {loading && <LoadingArea />}
           {roomchat?.messages?.error ? (
             <Divider sx={{ margin: 1 }}>
@@ -211,9 +213,9 @@ const Chat = () => {
                     lineHeight: '1.5',
                     letterSpacing: '0.6px',
                     backgroundColor:
-                      data.sender._id === profile._id ? 'secondary.main' : '#F0F2F5',
+                      data.sender._id === profile._id ? 'third.main' : '#F0F2F5',
                     color:
-                      data.sender._id === profile._id ? 'background.primary' : 'text.primary',
+                      data.sender._id === profile._id ? 'third.more' : 'text.primary',
                     borderRadius: 6,
                     padding: '10px 15px',
                     fontSize: '15px',
@@ -275,46 +277,48 @@ const Chat = () => {
           <div ref={messagesEndRef} />
         </Box>
         <Divider />
-        <Box sx={{ padding: '10px' }}>
+        <Box sx={{ display: 'flex', gap: 1, padding: 1 }}>
+          <Box sx={{ display: 'flex' }}>
+            <Tooltip title="Add reaction">
+              <IconButton color="error">
+                <AddReactionIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Attach file">
+              <IconButton color="warning" component="label">
+                <AttachFileIcon />
+                <input type="file" style={{ display: 'none' }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
           <Box
             sx={{
               backgroundColor: 'background.primary',
               height: '45px',
               width: '100%',
-              border: '1px solid green',
-              borderRadius: '100rem',
+              border: '1.5px solid #f3f3f5',
+              borderRadius: '50px',
               display: 'flex',
               alignItems: 'center',
               gap: 1,
             }}
           >
-            <Box sx={{ display: 'flex' }}>
-              <Tooltip title="Add reaction">
-                <IconButton color="error">
-                  <AddReactionIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Attach file">
-                <IconButton color="warning" component="label">
-                  <AttachFileIcon />
-                  <input type="file" style={{ display: 'none' }} />
-                </IconButton>
-              </Tooltip>
-            </Box>
             <input
               onBlur={() => handleUnTyping()}
               onFocus={() => handleTyping()}
               onChange={(e) => setChat(e.target.value)}
               value={chat}
               autoFocus
-              placeholder="Write a comment..."
+              placeholder="Aa"
               style={{
-                backgroundColor: 'transparent',
+                backgroundColor: '#f3f3f5',
                 border: 'none',
                 width: '100%',
                 height: '100%',
                 outline: 'none',
                 fontSize: '1rem',
+                borderRadius: '50px',
+                paddingLeft: '20px',
               }}
             />
             <Tooltip title="Send">
