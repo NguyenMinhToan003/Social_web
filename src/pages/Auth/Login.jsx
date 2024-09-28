@@ -34,7 +34,7 @@ const Login = () => {
     if (dataUser?._id) {
       dispatch(login(dataUser))
       dispatch(changeChatRoom(await getRoomChats(dataUser._id)))
-
+      localStorage.setItem('user', JSON.stringify(dataUser))
       navigation('/')
     }
 

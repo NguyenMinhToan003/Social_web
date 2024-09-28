@@ -36,7 +36,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
         right: 0,
         height: '100vh',
         backgroundColor: '#00000450',
-        zIndex: 100000,
+        zIndex: 10000,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'

@@ -139,7 +139,7 @@ const RoomChats = ({ setRoom }) => {
         flexDirection: 'column',
         overflowY: 'auto',
         overflowX: 'hidden',
-        padding: '10px'
+
       }}>
         {
           chipLabel && (

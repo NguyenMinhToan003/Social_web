@@ -194,7 +194,7 @@ const CreateRoomChat = ({ open, setOpen }) => {
           </Box>
           <Divider />
           <Box sx={{
-            height: '45vh', display: 'flex', flexDirection: 'column', border:
+            height: '50vh', display: 'flex', flexDirection: 'column', border:
               '1.2px solid black', borderRadius: '10px', overflow: 'hidden', gap: 1
           }}>
             <Typography variant='body1' sx={{ padding: 2, fontWeight: '600' }}>
@@ -211,7 +211,9 @@ const CreateRoomChat = ({ open, setOpen }) => {
                           ? 'background.primary' : 'background.secondary',
                         display: 'flex', gap: 2, padding: 2,
                         alignItems: 'center',
-
+                        cursor: 'pointer',
+                        borderTop: '1px solid #f2f4f6',
+                        borderBottom: '1px solid #f2f4f6',
                       }}>
                       {
                         members?.some(member => member._id === item._id)

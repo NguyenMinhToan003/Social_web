@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
+const baseState = {
   _id: '',
   username: '',
   email: '',
@@ -12,6 +12,9 @@ const initialState = {
   createdAt: null,
   updatedAt: null
 }
+const userStorage = JSON.parse(localStorage.getItem('user'))
+
+const initialState = userStorage ? userStorage : baseState
 export const userSlice = createSlice({
   name: 'userData',
   initialState,
