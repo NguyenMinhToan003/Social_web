@@ -12,6 +12,7 @@ import { Chip } from '@mui/material'
 import MenuChatRoom from '~/components/Menu/MenuChatRoom'
 import SearchIcon from '@mui/icons-material/Search';
 import LoadingArea from '~/components/LoadingArea'
+
 const RoomChats = ({ setRoom }) => {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -73,6 +74,7 @@ const RoomChats = ({ setRoom }) => {
         <MenuChatRoom roomChatAction={roomChatAction} setOpen={setOpen} open={open} />
       }
       <Box sx={{ position: 'relative', width: '100%', padding: 1 }}>
+
         <input
           value={keyword}
           onChange={(e) => { setKeyword(e.target.value) }}
@@ -82,8 +84,8 @@ const RoomChats = ({ setRoom }) => {
             width: '100%',
             padding: '10px 20px',
             fontSize: '17px',
-            border: '1.2px solid #6b6d71',
-            borderRadius: '25px',
+            borderRadius: 40,
+            marginBottom: 10
           }}
         />
 

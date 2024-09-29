@@ -7,7 +7,7 @@ const Home = () => {
     <>
       <Nav />
       <LeftHome />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', gap: 2 }}>
         <Box
           sx={{
             minWidth: theme => theme.socialMedia.widthLeft,

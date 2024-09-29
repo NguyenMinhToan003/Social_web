@@ -37,7 +37,7 @@ const BtnNotification = () => {
           </Badge>
         }
       >
-        <Typography
+        {/* <Typography
           sx={{
             display: { sm: 'none', xl: 'inline' },
             fontWeight: 'bold',
@@ -45,7 +45,7 @@ const BtnNotification = () => {
           }}
         >
           Notification
-        </Typography>
+        </Typography> */}
       </Button>
     </Tooltip>
   )

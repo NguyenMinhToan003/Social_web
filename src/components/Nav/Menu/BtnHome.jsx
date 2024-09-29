@@ -13,7 +13,7 @@ const BtnHome = () => {
       }}
       startIcon={<LocalFireDepartmentOutlinedIcon />}
     >
-      <Typography
+      {/* <Typography
         variant='body1'
         sx={{
           display: { sm: 'none', xl: 'inline' },
@@ -21,7 +21,7 @@ const BtnHome = () => {
         }}
       >
         Home
-      </Typography>
+      </Typography> */}
     </Button>
   </Tooltip>
 }

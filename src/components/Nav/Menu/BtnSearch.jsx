@@ -8,9 +8,9 @@ const BtnSearch = () => {
       variant="text"
       color="primary"
       sx={{ width: '100%', padding: '20px 0' }}
-      startIcon={<SearchOutlinedIcon fontSize="20px" />}
+      startIcon={<SearchOutlinedIcon />}
     >
-      <Typography
+      {/* <Typography
         variant='body1'
         sx={{
           display: { sm: 'none', xl: 'inline' },
@@ -18,7 +18,7 @@ const BtnSearch = () => {
         }}
       >
         Search
-      </Typography>
+      </Typography> */}
     </Button>
   </Tooltip>
 }

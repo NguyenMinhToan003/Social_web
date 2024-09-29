@@ -10,7 +10,7 @@ const BtnProfile = () => {
       sx={{ width: '100%', padding: '20px 0' }}
       startIcon={<ManageAccountsOutlinedIcon />}
     >
-      <Typography
+      {/* <Typography
         variant='body1'
         sx={{
           display: { sm: 'none', xl: 'inline' },
@@ -18,7 +18,7 @@ const BtnProfile = () => {
         }}
       >
         Account
-      </Typography>
+      </Typography> */}
     </Button>
   </Tooltip>
 }
