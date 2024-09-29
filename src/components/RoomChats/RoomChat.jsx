@@ -51,13 +51,14 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 1,
-        backgroundColor: roomChat._id === id ? 'background.primary' : 'inherit',
+        color: roomChat._id === id ? '#f0f0f0f0' : 'text.secondary',
+        backgroundColor: roomChat._id === id ? '#909090' : 'inherit',
         border: roomChat._id === id ? '2px solid #f0f0f0f0' : '2px solid transparent',
         cursor: 'pointer',
-        ':hover': { backgroundColor: 'background.primary' },
-        borderRadius: '30px 0 0 30px',
+        transition: 'all 0.2s ease',
+        ':hover': { backgroundColor: '#909090', color: '#f0f0f0f0', iconButton: { backgroundColor: '#f0f0f0f0' } },
+        borderRadius: '10px 0 0 10px',
         paddingX: 2,
-
       }} >
 
       <Box
@@ -68,7 +69,7 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
           justifyContent: 'flex-start',
           gap: 2,
           width: '100%',
-          paddingY: 2
+          paddingY: 1
         }}>
         <StyledBadge
           overlap="circular"
@@ -77,8 +78,8 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
           <Avatar src={roomChat?.avatarRoom}
             sx={{
               cursor: 'pointer',
-              width: '1.8rem',
-              height: '1.8rem'
+              width: '3rem',
+              height: '3rem'
             }} />
         </StyledBadge>
         <Box
@@ -90,8 +91,9 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
           }}>
           <Typography
             variant='body1'
-            color='text.primary'
+
             sx={{
+              color: 'inherit',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -104,6 +106,8 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
       </Box>
       {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}> */}
       <IconButton
+        iconButton
+        sx={{ backgroundColor: 'transparent' }}
         onClick={() => { setRoomChatAction(roomChat), setOpen(true) }}
       >
         <MoreHorizIcon

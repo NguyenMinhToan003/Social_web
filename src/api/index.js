@@ -22,7 +22,7 @@ instance.interceptors.response.use(
     if (error.response.status === StatusCodes.UNAUTHORIZED) {
       console.log('Unauthorized');
     }
-    return null
+    return error?.response?.data
   }
 );
 
