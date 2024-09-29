@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { useParams, useNavigate } from 'react-router-dom';
 import LoadingArea from '~/components/LoadingArea';
 import MenuChatRoom from '~/components/Menu/MenuChatRoom';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Chat = () => {
   const [open, setOpen] = useState(false)
@@ -47,7 +48,11 @@ const Chat = () => {
     setLoading(true);
     const response = await getRoomChatMessages(roomId, profile._id);
     if (response?.redirect) navigate(`/chats/${response.redirect}`);
+    if (response === undefined) setRoomchat(
+      { messages: { error: 'Cannot find Room chat' } }
+    );
     if (!response?.messages?.error) {
+      console.log('chat', response)
       response.messages = response?.messages?.map((data) => {
         data.sender = data.sender[0];
         data.createdAt = dayjs(data.createdAt).format('MM/DD-HH:mm');
@@ -182,65 +187,70 @@ const Chat = () => {
           {loading && <LoadingArea />}
           {roomchat?.messages?.error ? (
             <Divider sx={{ margin: 1 }}>
-              <Typography sx={{ color: 'red' }}>{roomchat.messages.error}</Typography>
+              <Typography variant='body1' sx={{ color: 'red', fontWeight: 'bold' }}>{roomchat.messages.error}
+              </Typography>
             </Divider>
           ) : (
-            roomchat?.messages?.map((data, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  justifyContent:
-                    data.sender._id === profile._id ? 'row-reverse' : 'row',
-                  alignItems: 'start',
-                  maxWidth: '100%',
-                  flexDirection: data.sender._id === profile._id ? 'row-reverse' : 'row',
-                  gap: 1,
-                  padding: '5px',
-                  ':hover .time': { opacity: 1, visibility: 'visible' },
-                }}
-              >
-                {data.sender._id !== profile._id && (
-                  <Avatar
-                    src={data.sender.profile_picture}
-                    sx={{ width: '36px', height: '36px' }}
-                  />
-                )}
-                <Typography
-                  variant="body1"
+            roomchat?.messages.length === 0 ?
+              <Divider sx={{ margin: 1 }}>
+                <Chip label={`Try chatting with ${roomchat?.room_name} now`} color='success' />
+              </Divider>
+              : roomchat?.messages?.map((data, index) => (
+                <Box
+                  key={index}
                   sx={{
-                    wordBreak: 'break-word',
-                    lineHeight: '1.5',
-                    letterSpacing: '0.6px',
-                    backgroundColor:
-                      data.status === 'deleted' ? 'error.light' : data.sender._id === profile._id ? 'third.main' : '#F0F2F5',
-                    color:
-                      data.status === 'deleted' ? 'third.more' :
-                        data.sender._id === profile._id ? 'third.more' : 'text.primary',
-                    borderRadius: 6,
-                    padding: '10px 15px',
-                    fontSize: '15px',
-                    fontweight: '50',
+                    display: 'flex',
+                    justifyContent:
+                      data.sender._id === profile._id ? 'row-reverse' : 'row',
+                    alignItems: 'start',
+                    maxWidth: '100%',
+                    flexDirection: data.sender._id === profile._id ? 'row-reverse' : 'row',
+                    gap: 1,
+                    padding: '5px',
+                    ':hover .time': { opacity: 1, visibility: 'visible' },
                   }}
                 >
-                  {data.message}
-                </Typography>
-                {data.userId !== profile._id && <Chip label={data.name} color="primary" />}
-                <Typography
-                  variant="caption"
-                  className="time"
-                  sx={{
-                    opacity: 0,
-                    transition: 'opacity 0.3s',
-                    visibility: 'hidden',
-                    whiteSpace: 'nowrap',
-                    color: 'text.secondary',
-                  }}
-                >
-                  {data.createdAt}
-                </Typography>
-              </Box>
-            ))
+                  {data.sender._id !== profile._id && (
+                    <Avatar
+                      src={data.sender.profile_picture}
+                      sx={{ width: '36px', height: '36px' }}
+                    />
+                  )}
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      wordBreak: 'break-word',
+                      lineHeight: '1.5',
+                      letterSpacing: '0.6px',
+                      backgroundColor:
+                        data.status === 'deleted' ? 'error.light' : data.sender._id === profile._id ? 'third.main' : '#F0F2F5',
+                      color:
+                        data.status === 'deleted' ? 'third.more' :
+                          data.sender._id === profile._id ? 'third.more' : 'text.primary',
+                      borderRadius: 6,
+                      padding: '10px 15px',
+                      fontSize: '15px',
+                      fontweight: '50',
+                    }}
+                  >
+                    {data.message}
+                  </Typography>
+                  {data.userId !== profile._id && <Chip label={data.name} color="primary" />}
+                  <Typography
+                    variant="caption"
+                    className="time"
+                    sx={{
+                      opacity: 0,
+                      transition: 'opacity 0.3s',
+                      visibility: 'hidden',
+                      whiteSpace: 'nowrap',
+                      color: 'text.secondary',
+                    }}
+                  >
+                    {data.createdAt}
+                  </Typography>
+                </Box>
+              ))
           )}
           {typing.length > 0 && (
             <Box
@@ -322,6 +332,13 @@ const Chat = () => {
                 paddingLeft: '20px',
               }}
             />
+            {
+              chat && (
+                <IconButton color="info" onClick={() => setChat('')}>
+                  <CloseIcon />
+                </IconButton>
+              )
+            }
             <Tooltip title="Send">
               <IconButton color="info" onClick={handleSendChat}>
                 <SendIcon />

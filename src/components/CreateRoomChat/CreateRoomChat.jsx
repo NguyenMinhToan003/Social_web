@@ -13,8 +13,10 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import BackspaceIcon from '@mui/icons-material/Backspace'
 import { createRoomChat } from '~/api/roomChatAPI'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
-const CreateRoomChat = ({ open, setOpen }) => {
+const CreateRoomChat = ({ open, setOpen, setOpenMenu }) => {
+  const navigate = useNavigate()
   const profile = useSelector(state => state.userData)
   const [listFriendsOrigin, setListFriendsOrigin] = useState([])
   const [keyword, setKeyword] = useState('')
@@ -54,12 +56,12 @@ const CreateRoomChat = ({ open, setOpen }) => {
     }
   }
   const handlerCancel = () => {
+    setRoomName('')
     setMembers([])
     setOpen(false)
   }
 
   const handlerCreateRoomChat = async () => {
-    console.log(members)
     const data = {
       room_name: roomName,
       members: [...members.map(item => item._id), profile._id],
@@ -70,9 +72,14 @@ const CreateRoomChat = ({ open, setOpen }) => {
     if (res) {
       setMembers([])
       setOpen(false)
+      setOpenMenu(false)
+      navigate(`/chats/${res.insertedId}`)
       toast.success('Create room chat success')
     }
     else toast.error('Create room chat fail')
+  }
+  const handlerReseRoomname = () => {
+    setRoomName('')
   }
 
   return (
@@ -153,20 +160,33 @@ const CreateRoomChat = ({ open, setOpen }) => {
                 </Box>
               </label>
 
-              <input
-                autoFocus
-                value={roomName}
-                onChange={(e) => setRoomName(e.target.value)}
-                placeholder='Room Name'
-                style={{
-                  height: '50px',
-                  width: '100%',
-                  padding: '10px 0',
-                  fontSize: '17px',
-                  border: 'none',
-                  borderBottom: '1.5px solid #2b54ea',
-                }}
-              />
+              <Box sx={{
+                position: 'relative', height: '50px',
+                width: '100%',
+              }}>
+                <input
+                  autoFocus
+                  value={roomName}
+                  onChange={(e) => setRoomName(e.target.value)}
+                  placeholder='Room Name'
+                  style={{
+                    width: '100%',
+                    padding: '10px 0',
+                    fontSize: '17px',
+                    border: 'none',
+                    borderBottom: '1.5px solid #2b54ea',
+                  }}
+                />
+                {
+                  roomName && (
+                    <IconButton sx={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)' }}
+                      onClick={handlerReseRoomname}
+                    >
+                      <BackspaceIcon />
+                    </IconButton>
+                  )
+                }
+              </Box>
             </Box>
             <Box sx={{ position: 'relative' }}>
               <input

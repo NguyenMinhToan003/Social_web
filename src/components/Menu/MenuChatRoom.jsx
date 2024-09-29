@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CreateRoomChat from '~/components/CreateRoomChat/CreateRoomChat';
+import GroupsIcon from '@mui/icons-material/Groups';
+import InfoIcon from '@mui/icons-material/Info';
 import { useState } from "react";
 const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
   const [openCreate, setOpenCreate] = useState(false)
@@ -27,7 +29,6 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
   }
   return (
     <>
-
       <Box sx={{
         scale: open ? 1 : 0,
         position: 'fixed',
@@ -41,7 +42,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <CreateRoomChat open={openCreate} setOpen={setOpenCreate} />
+        <CreateRoomChat open={openCreate} setOpen={setOpenCreate} setOpenMenu={setOpen} />
         <Box sx={{
           transition: 'all 0.25s ease-out',
           scale: open ? 1 : 0,
@@ -93,6 +94,18 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
               startIcon={<InsertEmoticonIcon />}
               sx={{ color: 'green' }}>
               Change Name
+            </Button>
+            <Button
+              startIcon={<GroupsIcon />}
+              sx={{ color: 'black' }}
+            >
+              Members
+            </Button>
+            <Button
+              startIcon={<InfoIcon />}
+              sx={{ color: 'orange' }}
+            >
+              Info
             </Button>
           </Box>
         </Box>

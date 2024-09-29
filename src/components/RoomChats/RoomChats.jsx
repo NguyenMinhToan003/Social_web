@@ -85,6 +85,7 @@ const RoomChats = ({ setRoom }) => {
             padding: '10px 20px',
             fontSize: '17px',
             borderRadius: 40,
+            border: '2px solid #f0f2f5',
             marginBottom: 10
           }}
         />
