@@ -2,7 +2,7 @@ import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
 export const theme = extendTheme({
   socialMedia: {
-    widthLeft: '15%',
+    widthLeft: '10%',
     widthMain: '65%',
     widthRight: '25%'
   },

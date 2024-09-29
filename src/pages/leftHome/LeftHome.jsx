@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Recovery from '~/components/Recovery/Recovery'
 import { useEffect, useState } from 'react'
-import Chat from '~/pages/Chats/chat/Chat'
 const LeftHome = () => {
   // const [statusAction, setStatusAction] = useState('recovery')
   const [room, setRoom] = useState([])
@@ -10,7 +9,7 @@ const LeftHome = () => {
   }, [room])
   return (
     <>
-      <Box sx={{ position: 'fixed', top: '0', right: '0', bottom: '0', width: theme => theme.socialMedia.widthRight, padding: '10px', display: { sm: 'none', lg: 'flex' }, flexDirection: 'column' }}>
+      <Box sx={{ position: 'fixed', top: '0', right: '0', bottom: '0', width: theme => theme.socialMedia.widthRight, padding: '10px', display: { sm: 'none', lg: 'flex' }, flexDirection: 'column', backgroundColor: '#f0f2f5' }}>
         {
           <Recovery setRoom={setRoom} />
         }

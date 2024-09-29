@@ -56,7 +56,6 @@ const RoomChatFriend = ({ friend }) => {
         backgroundColor: 'inherit',
         cursor: 'pointer',
         ':hover': { backgroundColor: 'background.primary' },
-
       }}
     >
       <Box
@@ -96,9 +95,9 @@ const RoomChatFriend = ({ friend }) => {
         <IconButton onclick={() => console.log('click')}>
           <MoreHorizIcon sx={{ fontSize: '25px', color: 'text.secondary' }} />
         </IconButton>
-        <IconButton sx={{ color: 'text.secondary', ':hover': { color: 'error.main' } }}>
+        {/* <IconButton sx={{ color: 'text.secondary', ':hover': { color: 'error.main' } }}>
           <CloseIcon sx={{ fontSize: '25px' }} />
-        </IconButton>
+        </IconButton> */}
       </Box>
     </Box>
   );

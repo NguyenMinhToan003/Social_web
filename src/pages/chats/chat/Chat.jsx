@@ -213,9 +213,10 @@ const Chat = () => {
                     lineHeight: '1.5',
                     letterSpacing: '0.6px',
                     backgroundColor:
-                      data.sender._id === profile._id ? 'third.main' : '#F0F2F5',
+                      data.status === 'deleted' ? 'error.light' : data.sender._id === profile._id ? 'third.main' : '#F0F2F5',
                     color:
-                      data.sender._id === profile._id ? 'third.more' : 'text.primary',
+                      data.status === 'deleted' ? 'third.more' :
+                        data.sender._id === profile._id ? 'third.more' : 'text.primary',
                     borderRadius: 6,
                     padding: '10px 15px',
                     fontSize: '15px',

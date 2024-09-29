@@ -26,7 +26,8 @@ const Nav = () => {
           fontSize: '1.2rem',
           color: 'text.secondary',
           overflowY: 'auto',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
+          backgroundColor: '#f0f2f5'
         }}
       >
         <NavLink to="/" className='navLink'>
@@ -53,8 +54,6 @@ const Nav = () => {
           <BtnProfile />
         </NavLink>
         <BtnAddPost />
-        <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
-        <BtnSwitchAccount />
       </Box>
 
       <Divider
