@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Avatar from '@mui/material/Avatar'
-import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/material/styles'
 import Badge from '@mui/material/Badge'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -42,7 +41,6 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
       }
     }
   }))
-  console.log(roomChat._id === id)
   return <>
 
     <Box
@@ -56,10 +54,14 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
         border: roomChat._id === id ? '2px solid #f0f0f0f0' : '2px solid transparent',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
-        ':hover': { backgroundColor: '#909090', color: '#f0f0f0f0', iconButton: { backgroundColor: '#f0f0f0f0' } },
+        ':hover': {
+          backgroundColor: '#909090', color: '#f0f0f0f0', iconButton: { backgroundColor: '#f0f0f0f0' },
+          '& .iconMore': { backgroundColor: '#f0f0f0f0', zIndex: 10 }
+        },
         borderRadius: '10px 0 0 10px',
         paddingX: 2,
-      }} >
+      }
+      } >
 
       <Box
         onClick={() => handleChooseRoom()}
@@ -106,8 +108,11 @@ const RoomChat = ({ roomChat, setOpen, setRoomChatAction }) => {
       </Box>
       {/* <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}> */}
       <IconButton
-        iconButton
-        sx={{ backgroundColor: 'transparent' }}
+        className='iconMore'
+        sx={{
+          backgroundColor: roomChat._id === id ? '#f0f0f0f0' : 'transparent',
+          transition: 'all 0.2s ease',
+        }}
         onClick={() => { setRoomChatAction(roomChat), setOpen(true) }}
       >
         <MoreHorizIcon

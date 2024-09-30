@@ -8,7 +8,6 @@ const Recovery = ({ setRoom }) => {
       <Typography variant='h6' sx={{ textAlign: 'center', fontWeight: 'bold' }}>
         Room Chats
       </Typography>
-
       <RoomChats setRoom={setRoom} />
     </>
   )

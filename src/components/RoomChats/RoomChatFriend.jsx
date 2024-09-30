@@ -3,18 +3,16 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
-import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import { useNavigate } from 'react-router-dom';
 
 const RoomChatFriend = ({ friend }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleChooseRoom = () => {
-    navigate(`/chats/${friend._id}`);
-  };
-
+    navigate(`/chats/${friend._id}`)
+  }
   if (!friend) return null;
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -44,7 +42,7 @@ const RoomChatFriend = ({ friend }) => {
         opacity: 0
       }
     }
-  }));
+  }))
 
   return (
     <Box

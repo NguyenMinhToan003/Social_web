@@ -1,146 +1,174 @@
-import Box from '@mui/material/Box';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import AddReactionIcon from '@mui/icons-material/AddReaction';
-import SendIcon from '@mui/icons-material/Send';
-import Chip from '@mui/material/Chip';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Typography from '@mui/material/Typography';
-import { socket } from '~/Socket';
-import { useEffect, useRef, useState } from 'react';
-import { getRoomChatMessages } from '~/api/roomChatAPI';
-import { sendMessage } from '~/api/messagesAPI';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
-import { useParams, useNavigate } from 'react-router-dom';
-import LoadingArea from '~/components/LoadingArea';
-import MenuChatRoom from '~/components/Menu/MenuChatRoom';
-import CloseIcon from '@mui/icons-material/Close';
-
+import Box from '@mui/material/Box'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import AttachFileIcon from '@mui/icons-material/AttachFile'
+import AddReactionIcon from '@mui/icons-material/AddReaction'
+import SendIcon from '@mui/icons-material/Send'
+import Chip from '@mui/material/Chip'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Divider from '@mui/material/Divider'
+import AvatarGroup from '@mui/material/AvatarGroup'
+import Typography from '@mui/material/Typography'
+import { socket } from '~/Socket'
+import { useEffect, useRef, useState } from 'react'
+import { getRoomChatMessages } from '~/api/roomChatAPI'
+import { sendMessage } from '~/api/messagesAPI'
+import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
+import dayjs from 'dayjs'
+import { useParams, useNavigate } from 'react-router-dom'
+import LoadingArea from '~/components/LoadingArea'
+import MenuChatRoom from '~/components/Menu/MenuChatRoom'
+import ModelMoreMessage from '~/components/Menu/ModelMoreMessage'
+import CloseIcon from '@mui/icons-material/Close'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import ReplyIcon from '@mui/icons-material/Reply'
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt'
 const Chat = () => {
-  const [open, setOpen] = useState(false)
-  const navigate = useNavigate();
-  const { id } = useParams();
-  let roomId = id;
-  const messagesEndRef = useRef(null);
-  const profile = useSelector((state) => state.userData);
-  const [chat, setChat] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [typing, setTyping] = useState([]);
+  const [openMenuRoom, setOpenMenuRoom] = useState(false)
+  const [openMenuMessage, setOpenMenuMessage] = useState({ status: false, data: {} })
+  const navigate = useNavigate()
+  const { id } = useParams()
+  let roomId = id
+  const messagesEndRef = useRef(null)
+  const profile = useSelector((state) => state.userData)
+  const [chat, setChat] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [typing, setTyping] = useState([])
   const [roomchat, setRoomchat] = useState({
     members: [],
     messages: [],
-  });
+  })
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [roomchat.messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [roomchat.messages])
 
   const fetchMessages = async () => {
-    roomId = id;
-    setLoading(true);
-    const response = await getRoomChatMessages(roomId, profile._id);
-    if (response?.redirect) navigate(`/chats/${response.redirect}`);
+    roomId = id
+    setLoading(true)
+    const response = await getRoomChatMessages(roomId, profile._id)
+    if (response?.redirect) navigate(`/chats/${response.redirect}`)
     if (response === undefined) setRoomchat(
       { messages: { error: 'Cannot find Room chat' } }
-    );
+    )
     if (!response?.messages?.error) {
-      console.log('chat', response)
       response.messages = response?.messages?.map((data) => {
-        data.sender = data.sender[0];
-        data.createdAt = dayjs(data.createdAt).format('MM/DD-HH:mm');
-        return data;
-      });
+        data.sender = data.sender[0]
+        data.createdAt = dayjs(data.createdAt).format('MM/DD-HH:mm')
+        return data
+      })
     }
-    setRoomchat(response);
-    setLoading(false);
-  };
+    setRoomchat(response)
+    setLoading(false)
+  }
 
   useEffect(() => {
-    fetchMessages();
+    fetchMessages()
     if (!roomchat?.messages?.error) {
-      socket.emit('join_room', roomId);
+      socket.emit('join_room', roomId)
       return () => {
-        socket.emit('leave_room', roomId);
-      };
+        socket.emit('leave_room', roomId)
+      }
     }
-  }, [id]);
+  }, [id])
 
-  const handleReceiveMessage = (data) => {
+  const handleReceiveMessage = async (data) => {
     setRoomchat((prevMessages) => ({
       ...prevMessages,
       messages: [...prevMessages.messages, data],
-    }));
-  };
+    }))
 
+  }
+  const handleRemoveMessage = (data) => {
+    //de tranh loi khi sua message thi dung kieu set (prevRoomchat) => ({...prevRoomchat})
+    setRoomchat((prevRoomchat) => (
+      {
+        ...prevRoomchat,
+        messages: prevRoomchat.messages.map((mess) => {
+          if (mess._id === data.message_id) {
+            mess.status = 'deleted'
+            mess.message = 'This message has been deleted'
+          }
+          return mess
+        })
+      }
+    ))
+  }
   useEffect(() => {
     if (!roomchat.messages.error) {
-      socket.on('receive_message', handleReceiveMessage);
+      socket.on('receive_message', handleReceiveMessage)
       socket.on('typing', (data) => {
-        setTyping(data);
-      });
+        setTyping(data)
+      })
       return () => {
-        socket.off('receive_message', handleReceiveMessage);
-        socket.off('typing');
-      };
+        socket.off('receive_message', handleReceiveMessage)
+        socket.off('typing')
+      }
     }
-  }, []);
+  }, [])
+  useEffect(() => {
+    socket.on('removeMessage', handleRemoveMessage)
+    return () => {
+      socket.off('removeMessage', handleRemoveMessage)
+    }
+  }, [socket])
 
   const handleUnTyping = () => {
     socket.emit('untyping', {
       room: roomId,
       username: profile.username,
       profile_picture: profile.profile_picture,
-    });
-  };
+    })
+  }
 
   const handleTyping = () => {
     socket.emit('typing', {
       room: roomId,
       username: profile.username,
       profile_picture: profile.profile_picture,
-    });
-  };
+    })
+  }
 
   const handleSendChat = async () => {
     if (roomchat.messages.error) {
-      return toast.error(roomchat.messages.error);
+      return toast.error(roomchat.messages.error)
     }
-    const message = chat.trim();
-    console.log(chat)
+    const message = chat.trim()
     if (chat) {
-      const time = new Date().toLocaleTimeString();
-      socket.emit('receive_message', {
-        room: roomId,
-        message: message,
-        createdAt: time,
-        sender: {
-          _id: profile._id,
-          name: profile.name,
-          profile_picture: profile.profile_picture,
-        },
-      });
       try {
-        await sendMessage(profile._id, roomId, chat);
+        const sent = await sendMessage(profile._id, roomId, chat)
+        const time = new Date().toLocaleTimeString()
+        socket.emit('receive_message', {
+          _id: sent.insertedId,
+          room: roomId,
+          message: message,
+          createdAt: time,
+          sender: {
+            _id: profile._id,
+            name: profile.name,
+            profile_picture: profile.profile_picture,
+          },
+        })
       } catch (error) {
-        toast.error('Error sending message.');
+        toast.error('Error sending message.')
       }
-      setChat('');
+      setChat('')
     }
-  };
-
+  }
   return (
     <>
       {
-        <MenuChatRoom roomChatAction={roomchat} setOpen={setOpen} open={open} />
+        <MenuChatRoom
+          roomChatAction={roomchat} setOpen={setOpenMenuRoom} open={openMenuRoom}
+        />
       }
+      <ModelMoreMessage
+        setOpen={setOpenMenuMessage} open={openMenuMessage}
+      />
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <Box
           sx={{
@@ -177,7 +205,7 @@ const Chat = () => {
             </Button>
           </Box>
           <Tooltip title="More">
-            <IconButton onClick={() => setOpen(true)}>
+            <IconButton onClick={() => setOpenMenuRoom(true)}>
               <MoreHorizIcon sx={{ color: 'text.primary' }} />
             </IconButton>
           </Tooltip>
@@ -191,7 +219,7 @@ const Chat = () => {
               </Typography>
             </Divider>
           ) : (
-            roomchat?.messages.length === 0 ?
+            roomchat?.messages?.length === 0 ?
               <Divider sx={{ margin: 1 }}>
                 <Chip label={`Try chatting with ${roomchat?.room_name} now`} color='success' />
               </Divider>
@@ -207,7 +235,7 @@ const Chat = () => {
                     flexDirection: data.sender._id === profile._id ? 'row-reverse' : 'row',
                     gap: 1,
                     padding: '5px',
-                    ':hover .time': { opacity: 1, visibility: 'visible' },
+                    ':hover .more': { opacity: 1, visibility: 'visible' },
                   }}
                 >
                   {data.sender._id !== profile._id && (
@@ -217,7 +245,7 @@ const Chat = () => {
                     />
                   )}
                   <Typography
-                    variant="body1"
+                    variant='body1'
                     sx={{
                       wordBreak: 'break-word',
                       lineHeight: '1.5',
@@ -235,20 +263,37 @@ const Chat = () => {
                   >
                     {data.message}
                   </Typography>
-                  {data.userId !== profile._id && <Chip label={data.name} color="primary" />}
-                  <Typography
-                    variant="caption"
-                    className="time"
-                    sx={{
-                      opacity: 0,
-                      transition: 'opacity 0.3s',
-                      visibility: 'hidden',
-                      whiteSpace: 'nowrap',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    {data.createdAt}
-                  </Typography>
+                  {data.userId !== profile._id && <Chip label={data.name} color='primary' />}
+                  <Box className='more' sx={{
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                    visibility: 'hidden',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 1,
+                    flexDirection: profile._id === data.sender._id ? 'row' : 'row-reverse'
+                  }}>
+                    {
+                      data.status !== 'deleted' && (
+                        <>
+                          <IconButton
+                            onClick={() => setOpenMenuMessage({ status: true, data: { ...data, roomId: id } })}
+                            sx={{ width: '30px', height: '30px' }}>
+                            <MoreVertIcon sx={{ with: '20px', height: '20px' }} />
+                          </IconButton>
+
+                          <IconButton sx={{ width: '30px', height: '30px' }}>
+                            <ReplyIcon sx={{ with: '20px', height: '20px', color: 'red' }} />
+                          </IconButton>
+                          <IconButton sx={{ width: '30px', height: '30px' }}>
+                            <SentimentSatisfiedAltIcon sx={{ with: '20px', height: '20px' }} />
+                          </IconButton>
+                        </>
+                      )
+                    }
+                  </Box>
                 </Box>
               ))
           )}
@@ -348,7 +393,7 @@ const Chat = () => {
         </Box>
       </Box >
     </>
-  );
-};
+  )
+}
 
-export default Chat;
+export default Chat

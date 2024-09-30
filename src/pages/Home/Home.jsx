@@ -18,6 +18,7 @@ const Home = () => {
         <Box
           sx={{
             width: '100%',
+            margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
             gap: 2,
