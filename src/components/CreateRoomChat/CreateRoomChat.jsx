@@ -14,9 +14,11 @@ import BackspaceIcon from '@mui/icons-material/Backspace'
 import { createRoomChat } from '~/api/roomChatAPI'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import Loading from '~/components/Loading'
 
 const CreateRoomChat = ({ open, setOpen, setOpenMenu }) => {
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const profile = useSelector(state => state.userData)
   const [listFriendsOrigin, setListFriendsOrigin] = useState([])
   const [keyword, setKeyword] = useState('')
@@ -68,7 +70,9 @@ const CreateRoomChat = ({ open, setOpen, setOpenMenu }) => {
       avatarRoom: avatarRoom,
       type: 'group'
     }
+    setLoading(true)
     const res = await createRoomChat(data)
+    setLoading(false)
     if (res) {
       setMembers([])
       setOpen(false)
@@ -76,6 +80,7 @@ const CreateRoomChat = ({ open, setOpen, setOpenMenu }) => {
       navigate(`/chats/${res.insertedId}`)
       toast.success('Create room chat success')
     }
+
     else toast.error('Create room chat fail')
   }
   const handlerReseRoomname = () => {
@@ -84,6 +89,9 @@ const CreateRoomChat = ({ open, setOpen, setOpenMenu }) => {
 
   return (
     <>
+      {
+        loading && <Loading />
+      }
       <Box
         sx={{
           transition: 'all 0.25s ease-out',
