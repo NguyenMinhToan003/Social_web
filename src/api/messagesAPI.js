@@ -8,7 +8,7 @@ export const sendMessage = async (roomId, userId, message) => {
   return res?.data
 }
 
-export const removeMessagesById = async (id) => {
-  const res = await axios.put(`/messages/${id}`)
+export const removeMessagesById = async (id, userId) => {
+  const res = await axios.put(`/messages/${id}&&${userId}`)
   return res?.data
 }

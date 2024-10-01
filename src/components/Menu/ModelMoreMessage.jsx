@@ -6,10 +6,11 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import Typography from '@mui/material/Typography'
 import { removeMessagesById } from '~/api/messagesAPI'
 import { socket } from '~/Socket'
+import { useSelector } from 'react-redux'
 const ModelMoreMessage = ({ open, setOpen, }) => {
-
+  const profile = useSelector(state => state.userData)
   const handlerRemoveMessage = async () => {
-    const res = await removeMessagesById(open?.data?._id)
+    const res = await removeMessagesById(open?.data?._id, profile?._id)
     if (res) {
       socket.emit('removeMessage', { room: open?.data?.roomId, message_id: open?.data?._id })
       setOpen({ status: false, data: {} })

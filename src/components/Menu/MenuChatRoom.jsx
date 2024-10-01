@@ -1,4 +1,7 @@
-import { Avatar, Box, Button, IconButton, Typography } from "@mui/material"
+import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import Divider from '@mui/material/Divider'
 import GroupAddIcon from '@mui/icons-material/GroupAdd'
@@ -6,14 +9,15 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon'
 import { removeRoomChat } from '~/api/roomChatAPI'
 import { useSelector } from 'react-redux'
-import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
-import CreateRoomChat from '~/components/CreateRoomChat/CreateRoomChat'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 import GroupsIcon from '@mui/icons-material/Groups'
 import InfoIcon from '@mui/icons-material/Info'
-import { useState } from "react"
-const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
-  const [openCreate, setOpenCreate] = useState(false)
+import { useState } from 'react'
+import MenuChatOption from '~/components/Menu/MenuChatOption'
+import { OPTION } from '~/utils/MenuOptionChat'
+const MenuChatRoom = ({ roomChatAction, setOpen, open, members }) => {
+  const [openOption, setOpenOption] = useState('')
   const navigate = useNavigate()
   const profile = useSelector(state => state.userData)
   const handlerRemoveRoomChat = async () => {
@@ -25,10 +29,15 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
     }
   }
   const hanndlerCreateRoomChat = () => {
-    setOpenCreate(true)
+    setOpenOption(OPTION.CREATE)
   }
+  const handleMembersRoomChat = () => {
+    setOpenOption(OPTION.MEMBER)
+  }
+
   return (
     <>
+      <MenuChatOption openOption={openOption} setOpenOption={setOpenOption} setOpenMenuMain={setOpen} members={members} />
       <Box sx={{
         scale: open ? 1 : 0,
         position: 'fixed',
@@ -36,13 +45,13 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
         left: 0,
         right: 0,
         height: '100vh',
-        backgroundColor: '#00000450',
+        backgroundColor: '#00000650',
         zIndex: 10000,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <CreateRoomChat open={openCreate} setOpen={setOpenCreate} setOpenMenu={setOpen} />
+
         <Box sx={{
           transition: 'all 0.25s ease-out',
           scale: open ? 1 : 0,
@@ -96,6 +105,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open }) => {
               Change Name
             </Button>
             <Button
+              onClick={handleMembersRoomChat}
               startIcon={<GroupsIcon />}
               sx={{ color: 'black' }}
             >
