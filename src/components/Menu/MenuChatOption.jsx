@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import { OPTION } from '~/utils/MenuOptionChat'
 import CreateRoomChat from './CreateRoomChat'
 import MembersRoomChat from './MemberRoomChat'
-const MenuChatOption = ({ openOption, setOpenOption, setOpenMenuMain, members }) => {
+const MenuChatOption = ({ openOption, setOpenOption, setOpenMenuMain, roomChat }) => {
 
   return <>
 
@@ -38,7 +38,7 @@ const MenuChatOption = ({ openOption, setOpenOption, setOpenMenuMain, members })
         }
         {
           openOption === OPTION.MEMBER &&
-          <MembersRoomChat setOpenOption={setOpenOption} setOpenMenuMain={setOpenMenuMain} openOption={openOption} members={members} />
+          <MembersRoomChat setOpenOption={setOpenOption} setOpenMenuMain={setOpenMenuMain} openOption={openOption} roomChat={roomChat} />
         }
       </Box>
     </Box >
