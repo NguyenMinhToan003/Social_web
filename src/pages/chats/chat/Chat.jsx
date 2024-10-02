@@ -62,7 +62,7 @@ const Chat = () => {
         return data
       })
     }
-
+    console.log('chat', response)
     setRoomchat(response)
     setLoading(false)
   }
@@ -165,7 +165,7 @@ const Chat = () => {
       {
         <MenuChatRoom
           roomChatAction={roomchat} setOpen={setOpenMenuRoom} open={openMenuRoom}
-          members={roomchat?.members}
+          roomChat={roomchat}
         />
       }
       <ModelMoreMessage

@@ -16,7 +16,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import { useState } from 'react'
 import MenuChatOption from '~/components/Menu/MenuChatOption'
 import { OPTION } from '~/utils/MenuOptionChat'
-const MenuChatRoom = ({ roomChatAction, setOpen, open, members }) => {
+const MenuChatRoom = ({ roomChatAction, setOpen, open, roomChat }) => {
   const [openOption, setOpenOption] = useState('')
   const navigate = useNavigate()
   const profile = useSelector(state => state.userData)
@@ -37,7 +37,7 @@ const MenuChatRoom = ({ roomChatAction, setOpen, open, members }) => {
 
   return (
     <>
-      <MenuChatOption openOption={openOption} setOpenOption={setOpenOption} setOpenMenuMain={setOpen} members={members} />
+      <MenuChatOption openOption={openOption} setOpenOption={setOpenOption} setOpenMenuMain={setOpen} roomChat={roomChat} />
       <Box sx={{
         scale: open ? 1 : 0,
         position: 'fixed',

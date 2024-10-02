@@ -8,23 +8,37 @@ import { OPTION } from '~/utils/MenuOptionChat'
 import Avatar from '@mui/material/Avatar'
 import { getListUserByListId } from '~/api/userAPI'
 import { useSelector } from 'react-redux'
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import TextField from '@mui/material/TextField'
-const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, members }) => {
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
+import { IconButton } from '@mui/material'
+const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, roomChat }) => {
   const profile = useSelector(state => state.userData)
-  console.log('members', members)
-  const listMembersOrigin = []
+  console.log('roomChat', roomChat)
+  const [listMembersOrigin, setListMembersOrigin] = useState([])
   const [keyword, setKeyword] = useState('')
   const [listMembers, setListMembers] = useState([])
   const fetchFriend = async () => {
-    const res = await getListUserByListId(profile._id, members)
+    const res = await getListUserByListId(profile._id, roomChat.members)
+    setListMembersOrigin(res)
+    console.log('listMembersOrigin', listMembersOrigin)
     setListMembers(res)
-    listMembersDefault = res
+
   }
   useEffect(() => {
     openOption === OPTION.MEMBER && setOpenMenuMain(false)
     fetchFriend()
   }, [openOption])
-
+  const handerSeachKey = (e) => {
+    const k = e.target.value
+    setKeyword(k)
+    if (k === '') return setListMembers(listMembersOrigin)
+    console.log('listMembersOrigin', listMembersOrigin)
+    const list = listMembersOrigin.filter(item => item.username.toLowerCase().includes(k.toLowerCase()))
+    console.log('list', list)
+    setListMembers(list)
+  }
   const handlerCancel = () => {
     setOpenOption('')
     setOpenMenuMain(true)
@@ -46,8 +60,9 @@ const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, members }
         overflowX: 'none',
       }}
     >
-      <Box sx={{ height: '10vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', padding: 2, gap: 1 }}>
-        <Button sx={{ width: 'fit-content' }} onClick={handlerCancel} startIcon={<ArrowCircleLeftIcon />}
+      <Box sx={{ height: '15vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', padding: 2, gap: 1 }}>
+        <Button sx={{ width: 'fit-content' }}
+          onClick={handlerCancel} startIcon={<ArrowCircleLeftIcon />}
         >
           <Typography
             variant='h5'
@@ -59,10 +74,17 @@ const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, members }
             MEMBERS ROOM
           </Typography>
         </Button>
+        <TextField
+          variant='outlined'
+          label='Search'
+          value={keyword}
+          onChange={handerSeachKey}
+        />
         <Divider />
       </Box>
       <Box sx={{
-        height: '68vh', display: 'flex', flexDirection: 'column', border:
+        margin: 1,
+        height: '60vh', display: 'flex', flexDirection: 'column', border:
           '3px solid #f0f2f5', borderRadius: '10px', overflow: 'hidden', gap: 1
         , backgroundColor: '#f0f2f5'
       }}>
@@ -72,6 +94,7 @@ const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, members }
         <Box sx={{ overflowY: 'auto', overflowX: 'none', height: '100%' }}>
           {
             listMembers?.map((item, index) => {
+              console.log(roomChat.members.includes(item._id))
               return (
                 <Box key={index}
                   onClick={() => handleChangeMenbers(item)}
@@ -84,12 +107,22 @@ const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, members }
                     cursor: 'pointer',
                     borderTop: '1px solid #f2f4f6',
                     borderBottom: '1px solid #f2f4f6',
+                    position: 'relative',
+                    '&:hover': {
+                      backgroundColor: '#f0f2f5',
+                      '& .remove': {
+                        display: 'block',
+
+                      }
+                    }
                   }}>
-                  {/* {
-                      true
-                        ? <CheckCircleIcon sx={{ color: 'secondary.main' }} />
-                        : <RadioButtonUncheckedIcon sx={{ color: 'secondary.main' }} />
-                    } */}
+                  {
+                    roomChat?.admins.includes(item._id)
+                      ? <WorkspacePremiumIcon sx={{ color: 'secondary.main' }} />
+                      : roomChat?.admins.includes(profile._id)
+                        ? <CheckCircleIcon sx={{ color: 'info.main' }} />
+                        : ''
+                  }
 
                   <Box sx={{ width: 40, height: 40, borderRadius: '50%', overflow: 'hidden' }}>
                     <Avatar src={item.profile_picture} />
@@ -98,12 +131,28 @@ const MembersRoomChat = ({ openOption, setOpenOption, setOpenMenuMain, members }
                   <Typography variant='body1' >
                     {item.username}
                   </Typography>
+                  <Box className='remove' sx={{ position: 'absolute', top: '50%', right: 2, transform: 'translateY(-50%)', display: 'none', backgroundColor: '#f0f2f5', borderRadius: '100rem' }}>
+                    <IconButton>
+                      <RemoveCircleOutlineIcon sx={{ color: 'error.main' }} />
+                    </IconButton>
+                  </Box>
                 </Box>
               )
             })
           }
         </Box>
+
       </Box>
+
+      <Button>
+        <Typography variant='body1' sx={{ color: 'info.main' }}>
+          Add Members
+        </Typography>
+      </Button>
+      <Button> <Typography variant='body1' sx={{ color: 'info.main' }}>
+        Save
+      </Typography></Button>
+
     </Box >
   </>
 }

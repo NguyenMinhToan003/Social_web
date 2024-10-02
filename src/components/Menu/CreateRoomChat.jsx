@@ -50,7 +50,8 @@ const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
     const k = e.target.value
     setKeyword(k)
     if (k === '') return setFriend(listFriendsOrigin)
-    const res = listFriendsOrigin.filter(item => item.username.includes(k))
+    const res = listFriendsOrigin.filter(
+      item => item.username.toLowerCase().includes(k.toLowerCase()))
     setFriend(res)
   }
   const handleChangeMenbers = (data) => {
@@ -73,7 +74,7 @@ const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
   const handlerCreateRoomChat = async () => {
     const data = {
       room_name: roomName,
-      members: [...members.map(item => item._id), profile._id],
+      members: [profile._id, ...members.map(item => item._id)],
       avatarRoom: avatarRoom,
       type: 'group'
     }
@@ -100,7 +101,6 @@ const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
       }
       {
         (
-
           <Box
             sx={{
               minWidth: 600,
@@ -215,7 +215,7 @@ const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
             </Box>
             <Divider />
             <Box sx={{
-              height: '50vh', display: 'flex', flexDirection: 'column', border:
+              height: '60vh', display: 'flex', flexDirection: 'column', border:
                 '3px solid #f0f2f5', borderRadius: '10px', overflow: 'hidden', gap: 1
               , backgroundColor: '#f0f2f5'
             }}>
@@ -258,36 +258,36 @@ const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
                   })
                 }
               </Box>
-
+              {
+                members.length > 0 && (
+                  <>
+                    <Typography variant='body1'>
+                      Members <span style={{ color: '#2b54ea' }}>({members.length})</span>
+                    </Typography>
+                    <Box sx={{ display: 'flex', padding: 1, gap: 1, flexWrap: 'wrap', overflowY: 'auto', height: '12vh', width: '100%' }}>
+                      {
+                        members.map((item, index) => {
+                          if (item._id === profile._id) return null
+                          return (
+                            <Box>
+                              <Chip
+                                key={index}
+                                avatar={<Avatar src={item.profile_picture} />}
+                                label={item.username}
+                                sx={{ height: 35 }}
+                                color='default'
+                                onDelete={() => handleChangeMenbers(item)}
+                              />
+                            </Box>
+                          )
+                        })
+                      }
+                    </Box>
+                  </>
+                )
+              }
             </Box>
-            {
-              members.length > 0 && (
-                <>
-                  <Typography variant='body1'>
-                    Members <span style={{ color: '#2b54ea' }}>({members.length})</span>
-                  </Typography>
-                  <Box sx={{ display: 'flex', padding: 1, gap: 1, flexWrap: 'wrap', overflowY: 'auto', height: '12vh', width: '100%' }}>
-                    {
-                      members.map((item, index) => {
-                        if (item._id === profile._id) return null
-                        return (
-                          <Box>
-                            <Chip
-                              key={index}
-                              avatar={<Avatar src={item.profile_picture} />}
-                              label={item.username}
-                              sx={{ height: 35 }}
-                              color='default'
-                              onDelete={() => handleChangeMenbers(item)}
-                            />
-                          </Box>
-                        )
-                      })
-                    }
-                  </Box>
-                </>
-              )
-            }
+
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 3 }}>
               <Button variant='contained' color='success' sx={{ color: 'background.primary' }} onClick={handlerCreateRoomChat} >
                 Create Room Chat
