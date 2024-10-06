@@ -16,6 +16,8 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import Loading from '~/components/Loading'
 import { OPTION } from '~/utils/MenuOptionChat'
+import { socket } from '~/Socket'
+
 
 const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
   const navigate = useNavigate()
@@ -80,6 +82,10 @@ const CreateRoomChat = ({ openOption, setOpenOption, setOpenMenuMain }) => {
     }
     setLoading(true)
     const res = await createRoomChat(data)
+    socket.emit('create-room-chat', {
+      roomChatId: res.insertedId,
+      members: data.members.slice(1)
+    })
     setLoading(false)
     if (res) {
       close()

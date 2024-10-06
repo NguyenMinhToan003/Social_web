@@ -3,6 +3,7 @@ import AppRouter from './routers/AppRouter'
 import { socket } from './Socket'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 function App() {
   const profile = useSelector(state => state.userData)
@@ -13,9 +14,13 @@ function App() {
       socket.emit('offline', profile._id)
     }
   }, [profile._id])
+  useEffect(() => {
+    socket.on('create-room-chat', (roomchat) => roomchat && toast.success(`invite room chat ${roomchat}`))
+
+  }, [socket])
   return (
     <>
-      <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <Container disableGutters maxWidth={false} sx={{ height: '100vh', backgroundColor: '#f0f2f5' }}>
         <AppRouter />
       </Container>
     </>

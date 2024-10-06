@@ -33,39 +33,30 @@ const Nav = () => {
         <NavLink to="/" className='navLink'>
           <BtnHome />
         </NavLink>
-        <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
+
         <NavLink to="/search" className='navLink'>
           <BtnSearch />
         </NavLink>
-        <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
+
         <NavLink to="/notifications" className='navLink'>
           <BtnNotification />
         </NavLink>
-        <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
+
         <NavLink to="/roomchats" className='navLink'>
           <BtnChat />
         </NavLink>
-        <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
+
         <NavLink to="/bookmark" className='navLink'>
           <BtnBookmark />
         </NavLink>
-        <Divider orientation="horizontal" sx={{ width: '100%', margin: '0' }} />
+
         <NavLink to="/profile" className='navLink'>
           <BtnProfile />
         </NavLink>
         <BtnAddPost />
       </Box>
 
-      <Divider
-        orientation="vertical"
-        sx={{
-          position: 'fixed',
-          left: (theme) => theme.socialMedia.widthLeft,
-          top: '0',
-          bottom: '0',
-          margin: '0'
-        }}
-      />
+
     </>
   )
 }

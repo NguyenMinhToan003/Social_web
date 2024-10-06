@@ -150,7 +150,7 @@ const Chat = () => {
           createdAt: time,
           sender: {
             _id: profile._id,
-            name: profile.name,
+            name: profile.username,
             profile_picture: profile.profile_picture,
           },
         })
