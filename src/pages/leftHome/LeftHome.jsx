@@ -9,7 +9,7 @@ const LeftHome = () => {
   }, [room])
   return (
     <>
-      <Box sx={{ position: 'fixed', top: '0', right: '0', bottom: '0', width: theme => theme.socialMedia.widthRight, padding: '10px', display: { sm: 'none', lg: 'flex' }, flexDirection: 'column', backgroundColor: '#f0f2f5' }}>
+      <Box sx={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: theme => theme.socialMedia.widthRight, padding: 1, display: { sm: 'none', lg: 'block' }, flexDirection: 'column', backgroundColor: '#f0f2f5' }}>
         {
           <Recovery setRoom={setRoom} />
         }
@@ -17,7 +17,7 @@ const LeftHome = () => {
           statusAction === 'chat' && <Chat setStatusAction={setStatusAction} room={room} />
         } */}
       </Box>
-      <Divider orientation="vertical" sx={{ position: 'fixed', right: theme => theme.socialMedia.widthRight, top: '0', bottom: '0', margin: '0', display: { sm: 'none', lg: 'block' } }} />
+
     </>
   )
 }

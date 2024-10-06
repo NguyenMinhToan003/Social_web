@@ -17,7 +17,10 @@ const Home = () => {
         </Box>
         <Box
           sx={{
+            borderRadius: '1rem',
+            backgroundColor: 'background.secondary',
             width: '100%',
+            height: '100vh',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
@@ -32,7 +35,7 @@ const Home = () => {
           sx={{
             minWidth: theme => theme.socialMedia.widthRight,
             maxWidth: theme => theme.socialMedia.widthRight,
-            display: { xs: 'none', lg: 'block' }
+            display: { sm: 'none', lg: 'block' }
           }}>
         </Box>
       </Box>
