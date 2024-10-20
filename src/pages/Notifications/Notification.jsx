@@ -8,6 +8,7 @@ import DoDisturbAltIcon from '@mui/icons-material/DoDisturbAlt'
 import { useState } from 'react'
 import { socket } from '~/Socket'
 const Notification = ({ notification }) => {
+  console.log('notification', notification)
   const [actionChoice, setActionChoice] = useState(null)
   const timeAgo = (date) => {
     const now = new Date()
@@ -49,21 +50,21 @@ const Notification = ({ notification }) => {
         boxShadow: '0px 2px 2px rgba(0, 0, 0, 0.1)'
       }}
     >
-      <Avatar alt={notification?.sender.name} src={notification?.sender.profile_picture} />
+      <Avatar alt={notification?.sender[0].username} src={notification?.sender[0].profile_picture} />
       <Box sx={{ width: '100%', display: 'flex', gap: 2, flexDirection: 'column' }}>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', }}>
           <Typography color='text.secondary' sx={{ fontWeight: '500', fontSize: '18px' }}>
-            {notification?.sender.username}
+            {notification?.sender[0].username}
           </Typography>
           <Typography color='error.main' sx={{ fontSize: '11px' }}>
             {timeAgo(new Date(notification?.createdAt))}
           </Typography>
         </Box>
         <Typography color='text.primary' sx={{ fontSize: '14px' }}>
-          {notification?.message}
+          {notification?.content}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 2 }}>
-          {actionChoice === null && notification?.type === 'friend_request' && (
+          {actionChoice === null && notification?.type === 'invite' && (
             <>
               <Button variant='text' sx={{ color: '#0071FF', fontWeight: 'bold' }} onClick={() => { handleAccept(), setActionChoice('Accept') }}>
                 Accept
@@ -73,10 +74,10 @@ const Notification = ({ notification }) => {
               </Button>
             </>
           )}
-          {actionChoice === 'Accept' && notification?.type === 'friend_request' && (
+          {actionChoice === 'Accept' && notification?.type === 'invite' && (
             <Chip label='Accepted' icon={<CheckCircleOutlineIcon />} color='success' />
           )}
-          {actionChoice === 'Reject' && notification?.type === 'friend_request' && (
+          {actionChoice === 'Reject' && notification?.type === 'invite' && (
             <Chip label='Rejected' icon={<DoDisturbAltIcon color='error' />} sx={{ color: 'error.main' }} />
           )}
 
